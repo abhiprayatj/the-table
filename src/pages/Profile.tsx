@@ -144,31 +144,31 @@ export default function Profile() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card className="mb-8">
-          <CardContent className="pt-6">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Card className="mb-8 border-border/50">
+          <CardContent className="pt-8">
             <div className="flex items-start gap-6">
-              <Avatar className="h-24 w-24">
+              <Avatar className="h-20 w-20">
                 <AvatarImage src={profile?.avatar_url} />
-                <AvatarFallback className="text-2xl">
+                <AvatarFallback className="text-xl bg-muted">
                   {profile?.full_name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-bold">{profile?.full_name}</h1>
+                  <h1 className="text-3xl font-serif font-medium">{profile?.full_name}</h1>
                   {profile?.host_verified && (
-                    <Badge variant="secondary" className="bg-secondary">
+                    <Badge variant="secondary" className="bg-accent/50">
                       Verified Host
                     </Badge>
                   )}
                 </div>
-                <p className="text-muted-foreground mb-2">
+                <p className="text-muted-foreground mb-2 text-sm">
                   {profile?.city}, {profile?.country}
                 </p>
                 {profile?.bio && (
-                  <p className="text-sm mt-3">{profile.bio}</p>
+                  <p className="text-sm mt-3 text-foreground/80 leading-relaxed">{profile.bio}</p>
                 )}
               </div>
             </div>
@@ -176,28 +176,28 @@ export default function Profile() {
         </Card>
 
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Card>
+          <Card className="border-border/50">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-xl font-serif font-medium">
                 <Coins className="h-5 w-5" />
                 Your Credits
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-[hsl(var(--topped-up-credit))]" />
-                  <span className="font-medium">Topped Up</span>
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--topped-up-credit))]" />
+                  <span className="font-medium text-sm">Topped Up</span>
                 </div>
-                <span className="text-xl font-bold">{credits?.topped_up_balance || 0}</span>
+                <span className="text-2xl font-serif font-medium">{credits?.topped_up_balance || 0}</span>
               </div>
               
-              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-[hsl(var(--teaching-credit))]" />
-                  <span className="font-medium">Teaching</span>
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--teaching-credit))]" />
+                  <span className="font-medium text-sm">Teaching</span>
                 </div>
-                <span className="text-xl font-bold">{credits?.teaching_balance || 0}</span>
+                <span className="text-2xl font-serif font-medium">{credits?.teaching_balance || 0}</span>
               </div>
 
               <Button onClick={handleTopUp} className="w-full" size="lg">
@@ -206,9 +206,9 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-border/50">
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle className="text-xl font-serif font-medium">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {profile?.host_verified ? (
@@ -243,10 +243,10 @@ export default function Profile() {
           </Card>
         </div>
 
-        <Card>
+        <Card className="border-border/50">
           <CardContent className="p-6">
             <Tabs defaultValue="joined">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-2 bg-muted/30">
                 <TabsTrigger value="joined">Classes I've Joined</TabsTrigger>
                 {profile?.host_verified && (
                   <TabsTrigger value="hosted">Classes I've Hosted</TabsTrigger>
@@ -270,16 +270,16 @@ export default function Profile() {
                     {joinedClasses.map((classItem: any) => (
                       <div
                         key={classItem.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                        className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:bg-muted/20 cursor-pointer transition-colors"
                         onClick={() => navigate(`/class/${classItem.id}`)}
                       >
                         <div>
-                          <h3 className="font-semibold">{classItem.title}</h3>
+                          <h3 className="font-serif font-medium">{classItem.title}</h3>
                           <p className="text-sm text-muted-foreground mt-1">
                             {format(parseISO(classItem.date), "MMM d, yyyy")} • {classItem.profiles.full_name}
                           </p>
                         </div>
-                        <Badge variant="outline">{classItem.category}</Badge>
+                        <Badge variant="outline" className="text-xs">{classItem.category}</Badge>
                       </div>
                     ))}
                   </div>
@@ -302,19 +302,19 @@ export default function Profile() {
                   ) : (
                     <div className="space-y-4">
                       {hostedClasses.map((classItem: any) => (
-                        <div
-                          key={classItem.id}
-                          className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 cursor-pointer"
-                          onClick={() => navigate(`/class/${classItem.id}`)}
-                        >
-                          <div>
-                            <h3 className="font-semibold">{classItem.title}</h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {format(parseISO(classItem.date), "MMM d, yyyy")} • {classItem.bookings.length}/{classItem.max_participants} spots
-                            </p>
-                          </div>
-                          <Badge variant="outline">{classItem.category}</Badge>
+                      <div
+                        key={classItem.id}
+                        className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:bg-muted/20 cursor-pointer transition-colors"
+                        onClick={() => navigate(`/class/${classItem.id}`)}
+                      >
+                        <div>
+                          <h3 className="font-serif font-medium">{classItem.title}</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {format(parseISO(classItem.date), "MMM d, yyyy")} • {classItem.bookings.length}/{classItem.max_participants} spots
+                          </p>
                         </div>
+                        <Badge variant="outline" className="text-xs">{classItem.category}</Badge>
+                      </div>
                       ))}
                     </div>
                   )}

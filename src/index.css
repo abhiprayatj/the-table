@@ -2,100 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Elegant neutral design system inspired by PamPam */
 
 @layer base {
   :root {
-    --background: 30 20% 98%;
-    --foreground: 25 15% 15%;
+    --background: 35 25% 97%;
+    --foreground: 0 0% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 25 15% 15%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 25 15% 15%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 15 85% 65%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 145 30% 60%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 30 15% 92%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 30 10% 90%;
-    --muted-foreground: 25 10% 45%;
+    --muted: 30 20% 94%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 20 75% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 35 30% 88%;
+    --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
     --border: 30 15% 88%;
     --input: 30 15% 88%;
-    --ring: 15 85% 65%;
+    --ring: 0 0% 20%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
     
-    /* Custom tokens for CommonFolk */
-    --warm-coral: 15 85% 65%;
-    --sage-green: 145 30% 60%;
-    --terracotta: 20 75% 55%;
-    --warm-neutral: 30 20% 98%;
-    --soft-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-    
-    /* Credit tokens */
-    --topped-up-credit: 280 70% 65%;
-    --teaching-credit: 45 100% 55%;
+    /* Credit tokens - elegant neutrals */
+    --topped-up-credit: 280 30% 50%;
+    --teaching-credit: 40 80% 55%;
 
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 0 0% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 30 20% 94%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 30 15% 88%;
+    --sidebar-ring: 0 0% 20%;
   }
 
   .dark {
-    --background: 25 20% 12%;
-    --foreground: 30 10% 95%;
+    --background: 0 0% 10%;
+    --foreground: 0 0% 98%;
 
-    --card: 25 15% 15%;
-    --card-foreground: 30 10% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 25 15% 15%;
-    --popover-foreground: 30 10% 95%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 15 85% 65%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 10%;
 
-    --secondary: 145 30% 50%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 25 10% 20%;
-    --muted-foreground: 30 8% 60%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 20 75% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 25 15% 25%;
-    --input: 25 15% 25%;
-    --ring: 15 85% 65%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 80%;
     
-    --sidebar-background: 25 20% 12%;
-    --sidebar-foreground: 30 10% 95%;
-    --sidebar-primary: 15 85% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 25 15% 20%;
-    --sidebar-accent-foreground: 30 10% 95%;
-    --sidebar-border: 25 15% 25%;
-    --sidebar-ring: 15 85% 65%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 0 0% 80%;
   }
 }
 
@@ -105,6 +96,10 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
   }
 }

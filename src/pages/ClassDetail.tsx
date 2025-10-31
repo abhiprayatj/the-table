@@ -209,8 +209,8 @@ export default function ClassDetail() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="aspect-[21/9] rounded-xl overflow-hidden mb-8 bg-muted">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="aspect-[21/9] rounded-lg overflow-hidden mb-12 bg-muted/30 border border-border/50">
           {classData.thumbnail_url ? (
             <img
               src={classData.thumbnail_url}
@@ -218,37 +218,37 @@ export default function ClassDetail() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20">
-              <h1 className="text-4xl font-bold text-center px-4">{classData.title}</h1>
+            <div className="w-full h-full flex items-center justify-center bg-accent/20">
+              <h1 className="text-5xl font-serif font-medium text-center px-8">{classData.title}</h1>
             </div>
           )}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-3xl font-bold">{classData.title}</h1>
-                <Badge>{classData.category}</Badge>
+                <h1 className="text-4xl font-serif font-medium">{classData.title}</h1>
+                <Badge variant="outline" className="text-xs">{classData.category}</Badge>
               </div>
-              <p className="text-lg text-muted-foreground whitespace-pre-wrap">
+              <p className="text-lg text-muted-foreground whitespace-pre-wrap leading-relaxed">
                 {classData.description}
               </p>
             </div>
 
-            <Card>
+            <Card className="border-border/50">
               <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">About Your Host</h2>
+                <h2 className="text-xl font-serif font-medium mb-4">About Your Host</h2>
                 <div className="flex items-start gap-4">
-                  <Avatar className="h-16 w-16">
+                  <Avatar className="h-14 w-14">
                     <AvatarImage src={classData.profiles.avatar_url || undefined} />
-                    <AvatarFallback className="text-lg">
+                    <AvatarFallback className="text-lg bg-muted">
                       {classData.profiles.full_name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-semibold text-lg">{classData.profiles.full_name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <h3 className="font-serif font-medium text-lg">{classData.profiles.full_name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                       {classData.profiles.bio || "No bio available"}
                     </p>
                   </div>
@@ -258,19 +258,19 @@ export default function ClassDetail() {
 
             {user && isBooked && (
               <>
-                <Card className="bg-muted/50">
+                <Card className="bg-muted/20 border-border/50">
                   <CardContent className="p-6">
-                    <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <h2 className="text-xl font-serif font-medium mb-3 flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
                       Exact Address
                     </h2>
-                    <p className="text-muted-foreground">{classData.address}</p>
+                    <p className="text-foreground/80">{classData.address}</p>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-border/50">
                   <CardContent className="p-6">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <h2 className="text-xl font-serif font-medium mb-4 flex items-center gap-2">
                       <Users className="h-5 w-5" />
                       Who's Joining ({classData.bookings.length}/{classData.max_participants})
                     </h2>
@@ -293,10 +293,10 @@ export default function ClassDetail() {
             )}
 
             {!user && (
-              <Card className="bg-muted/50">
+              <Card className="bg-muted/20 border-border/50">
                 <CardContent className="p-6 text-center">
                   <Lock className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Log in to see the exact address and who's joining
                   </p>
                 </CardContent>
@@ -305,39 +305,42 @@ export default function ClassDetail() {
           </div>
 
           <div className="lg:col-span-1">
-            <Card className="sticky top-20">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between text-2xl font-bold">
-                  <div className="flex items-center gap-2">
-                    <Coins className="h-6 w-6 text-primary" />
-                    <span>{classData.cost_credits} credits</span>
-                  </div>
+            <Card className="sticky top-24 border-border/50">
+              <CardContent className="p-6 space-y-6">
+                <div className="text-3xl font-serif font-medium">
+                  {classData.cost_credits} credits
                 </div>
 
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>{format(parseISO(classData.date), "EEEE, MMMM d, yyyy")}</span>
+                <div className="space-y-3 text-sm border-t border-border/50 pt-6">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-foreground/80">
+                      {format(parseISO(classData.date), "EEEE, MMMM d, yyyy")}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{classData.time} ({classData.duration} hours)</span>
+                  <div className="flex items-center gap-3">
+                    <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-foreground/80">
+                      {classData.time} ({classData.duration} hours)
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{classData.city}, {classData.country}</span>
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-foreground/80">
+                      {classData.city}, {classData.country}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <span>
+                  <div className="flex items-center gap-3">
+                    <Users className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-foreground/80">
                       {classData.bookings.length}/{classData.max_participants} spots filled
                     </span>
                   </div>
                 </div>
 
                 {isBooked ? (
-                  <div className="bg-secondary/20 text-secondary-foreground rounded-lg p-4 text-center">
-                    <p className="font-semibold">You're booked! ✓</p>
+                  <div className="bg-accent/30 rounded-lg p-4 text-center border border-border/50">
+                    <p className="font-medium text-foreground">You're booked ✓</p>
                   </div>
                 ) : (
                   <Button
@@ -348,7 +351,7 @@ export default function ClassDetail() {
                   >
                     {classData.bookings.length >= classData.max_participants
                       ? "Class Full"
-                      : `Book This Class (${classData.cost_credits} credits)`}
+                      : `Book This Class`}
                   </Button>
                 )}
               </CardContent>

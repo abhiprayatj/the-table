@@ -67,13 +67,13 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-            Learn from Your Neighbors
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-20">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-medium mb-6 text-foreground leading-tight">
+            Learn from your neighbors
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover small, in-person classes taught by people in your community. From cooking to languages, find your next adventure.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-light">
+            CommonFolk is the easiest way to discover and join small, in-person classes in your community.
           </p>
         </div>
 
@@ -82,23 +82,19 @@ export default function Index() {
             <p className="text-muted-foreground">Loading classes...</p>
           </div>
         ) : Object.keys(classesByDate).length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground mb-4">No classes available yet.</p>
-            <p className="text-sm text-muted-foreground">Be the first to host a session!</p>
+          <div className="text-center py-16 bg-muted/30 rounded-lg">
+            <p className="text-muted-foreground mb-2 text-lg">No classes available yet.</p>
+            <p className="text-sm text-muted-foreground">Be the first to host a session.</p>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-16">
             {Object.entries(classesByDate).map(([date, dateClasses]) => (
               <div key={date}>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-px flex-1 bg-border" />
-                  <h2 className="text-2xl font-semibold">
-                    📅 {format(parseISO(date), "EEEE, MMMM d, yyyy")}
-                  </h2>
-                  <div className="h-px flex-1 bg-border" />
-                </div>
+                <h2 className="text-2xl font-serif font-medium mb-8 text-foreground">
+                  {format(parseISO(date), "EEEE, MMMM d")}
+                </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {dateClasses.map((classItem) => (
                     <ClassCard
                       key={classItem.id}

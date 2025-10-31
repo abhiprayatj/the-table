@@ -119,10 +119,12 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">{isSignUp ? "Join CommonFolk" : "Welcome Back"}</CardTitle>
-          <CardDescription>
+      <Card className="w-full max-w-md border-border/50">
+        <CardHeader className="space-y-3">
+          <CardTitle className="text-3xl font-serif font-medium">
+            {isSignUp ? "Join CommonFolk" : "Welcome back"}
+          </CardTitle>
+          <CardDescription className="text-base">
             {isSignUp
               ? "Create your account to start learning and teaching"
               : "Sign in to continue your learning journey"}
@@ -207,11 +209,11 @@ export default function Auth() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-6 text-center text-sm text-muted-foreground">
             {isSignUp ? "Already have an account? " : "Don't have an account? "}
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-primary hover:underline font-medium"
+              className="text-foreground hover:underline font-medium"
             >
               {isSignUp ? "Sign in" : "Sign up"}
             </button>

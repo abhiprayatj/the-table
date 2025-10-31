@@ -155,11 +155,11 @@ export default function CreateClass() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Host a Session</CardTitle>
-            <CardDescription>
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Card className="border-border/50">
+          <CardHeader className="space-y-3">
+            <CardTitle className="text-3xl font-serif font-medium">Host a Session</CardTitle>
+            <CardDescription className="text-base">
               Share your skills and knowledge with your community
             </CardDescription>
           </CardHeader>
@@ -254,10 +254,10 @@ export default function CreateClass() {
                 />
               </div>
 
-              <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+              <div className="bg-muted/30 p-5 rounded-lg space-y-2 border border-border/50">
                 <p className="text-sm font-medium">Class Details:</p>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Cost: 5 credits (£10)</li>
+                  <li>• Cost: 5 credits</li>
                   <li>• Max participants: 10</li>
                   <li>• Location: {profile.city}, {profile.country}</li>
                 </ul>
