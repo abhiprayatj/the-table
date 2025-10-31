@@ -8,6 +8,8 @@ import Auth from "./pages/Auth";
 import ClassDetail from "./pages/ClassDetail";
 import Profile from "./pages/Profile";
 import CreateClass from "./pages/CreateClass";
+import ApplyHost from "./pages/ApplyHost";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/class/:id" element={<ClassDetail />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-class" element={<CreateClass />} />
+          <Route path="/apply-host" element={<ApplyHost />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

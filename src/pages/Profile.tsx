@@ -19,6 +19,7 @@ export default function Profile() {
   const [hostedClasses, setHostedClasses] = useState<any[]>([]);
   const [joinedClasses, setJoinedClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hostApplication, setHostApplication] = useState<any>(null);
 
   useEffect(() => {
     checkAuthAndFetchData();
@@ -82,6 +83,19 @@ export default function Profile() {
         .eq("user_id", userId);
 
       setJoinedClasses(bookings?.map(b => b.classes) || []);
+
+      // Fetch host application if user is not a verified host
+      if (!profileData?.host_verified) {
+        const { data: appData } = await supabase
+          .from("host_applications")
+          .select("*")
+          .eq("user_id", userId)
+          .order("submitted_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        setHostApplication(appData);
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
     } finally {
@@ -222,12 +236,56 @@ export default function Profile() {
                 </Button>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Want to teach? Apply to become a verified host!
-                  </p>
-                  <Button variant="outline" size="sm" disabled>
-                    Apply to Host (Coming Soon)
-                  </Button>
+                  {hostApplication ? (
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground">
+                        Application Status:{" "}
+                        <span
+                          className={`font-medium ${
+                            hostApplication.status === "pending"
+                              ? "text-amber-600"
+                              : hostApplication.status === "approved"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {hostApplication.status.charAt(0).toUpperCase() +
+                            hostApplication.status.slice(1)}
+                        </span>
+                      </p>
+                      {hostApplication.status === "pending" && (
+                        <p className="text-xs text-muted-foreground">
+                          Submitted{" "}
+                          {format(
+                            parseISO(hostApplication.submitted_at),
+                            "MMM d, yyyy"
+                          )}
+                        </p>
+                      )}
+                      {hostApplication.status === "rejected" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate("/apply-host")}
+                        >
+                          Reapply
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Want to teach? Apply to become a verified host!
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate("/apply-host")}
+                      >
+                        Apply to Host
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
               

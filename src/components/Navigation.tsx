@@ -22,6 +22,7 @@ export const Navigation = () => {
   const [user, setUser] = useState<User | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
   const [profile, setProfile] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -59,8 +60,15 @@ export const Navigation = () => {
       .eq("id", userId)
       .single();
 
+    // Check if user has admin role
+    const { data: adminCheck } = await supabase.rpc('has_role', {
+      _user_id: userId,
+      _role: 'admin'
+    });
+
     setCredits(creditsData);
     setProfile(profileData);
+    setIsAdmin(adminCheck || false);
   };
 
   const handleSignOut = async () => {
@@ -117,6 +125,11 @@ export const Navigation = () => {
                     {profile?.host_verified && (
                       <DropdownMenuItem onClick={() => navigate("/create-class")}>
                         Host a Session
+                      </DropdownMenuItem>
+                    )}
+                    {isAdmin && (
+                      <DropdownMenuItem onClick={() => navigate("/admin")}>
+                        Admin Dashboard
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />
