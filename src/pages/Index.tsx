@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
 import { ClassCard } from "@/components/ClassCard";
 import { format, parseISO } from "date-fns";
+import { User } from "@supabase/supabase-js";
 interface ClassWithHost {
   id: string;
   title: string;
@@ -27,8 +28,21 @@ interface ClassWithHost {
 export default function Index() {
   const [classes, setClasses] = useState<ClassWithHost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     fetchClasses();
+
+    // Check auth status
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
   const fetchClasses = async () => {
     try {
@@ -66,10 +80,12 @@ export default function Index() {
       <Navigation />
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-20">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-medium mb-6 text-foreground leading-tight">Make Learning Human</h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-light">Gather with curious folks and learn something around a table</p>
-        </div>
+        {!user && (
+          <div className="text-center mb-20">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-medium mb-6 text-foreground leading-tight">Make Learning Human</h1>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-light">Gather with curious folks and learn something around a table</p>
+          </div>
+        )}
 
         {loading ? <div className="text-center py-12">
             <p className="text-muted-foreground">Loading classes...</p>
