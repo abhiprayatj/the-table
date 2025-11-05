@@ -47,7 +47,7 @@ export const ClassCard = ({
       className="overflow-hidden hover:shadow-md transition-shadow duration-300 cursor-pointer border-border/50" 
       onClick={() => navigate(`/class/${id}`)}
     >
-      <div className="aspect-[4/3] bg-muted/30 relative overflow-hidden">
+      <div className="aspect-[16/9] bg-muted/30 relative overflow-hidden">
         {thumbnailUrl ? (
           <img 
             src={thumbnailUrl} 
@@ -56,17 +56,17 @@ export const ClassCard = ({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-accent/30">
-            <h3 className="text-xl font-serif font-medium text-center px-6 text-foreground/90">
+            <h3 className="text-lg font-serif font-medium text-center px-4 text-foreground/90">
               {title}
             </h3>
           </div>
         )}
       </div>
       
-      <CardContent className="p-6 space-y-4">
+      <CardContent className="p-4 space-y-3">
         <div>
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="font-serif font-medium text-xl leading-tight">{title}</h3>
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <h3 className="font-serif font-medium text-lg leading-tight">{title}</h3>
             <Badge variant="outline" className="shrink-0 text-xs">
               {category}
             </Badge>
@@ -77,7 +77,7 @@ export const ClassCard = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <Avatar className="h-7 w-7">
+          <Avatar className="h-6 w-6">
             <AvatarImage src={hostAvatar} />
             <AvatarFallback className="text-xs bg-muted">{hostName.charAt(0)}</AvatarFallback>
           </Avatar>
@@ -103,7 +103,7 @@ export const ClassCard = ({
           </div>
         </div>
 
-        <div className="text-sm font-medium pt-2">
+        <div className="text-sm font-medium pt-1">
           {costCredits} credits
         </div>
       </CardContent>
