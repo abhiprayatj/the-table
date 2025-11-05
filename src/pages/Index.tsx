@@ -79,7 +79,7 @@ export default function Index() {
   return <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
         {!user && (
           <div className="text-center mb-20">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif font-medium mb-6 text-foreground leading-tight">Make Learning Human</h1>
