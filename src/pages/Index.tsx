@@ -34,19 +34,24 @@ export default function Index() {
   const [user, setUser] = useState<User | null>(null);
   const classesRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchClasses();
 
     // Check auth status
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({
+      data: {
+        session
+      }
+    }) => {
       setUser(session?.user ?? null);
     });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: {
+        subscription
+      }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
     return () => subscription.unsubscribe();
   }, []);
   const fetchClasses = async () => {
@@ -82,41 +87,31 @@ export default function Index() {
     return acc;
   }, {} as Record<string, ClassWithHost[]>);
   const scrollToClasses = () => {
-    classesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    classesRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
   return <div className="min-h-screen bg-background">
       <Navigation />
       
-      {!user && (
-        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      {!user && <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-medium mb-8 text-foreground leading-tight">
-              Everyone's got something to share. Learn on <span className="text-accent-tan font-bold">the table.</span>
+              Everyone's got something to share. Learn on <span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                size="lg"
-                onClick={scrollToClasses}
-                className="rounded-full text-base px-8 py-6 h-auto bg-primary text-primary-foreground hover:bg-primary/90"
-              >
+              <Button size="lg" onClick={scrollToClasses} className="rounded-full text-base px-8 py-6 h-auto bg-primary text-primary-foreground hover:bg-primary/90">
                 Browse Classes
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => navigate("/apply-host")}
-                className="rounded-full text-base px-8 py-6 h-auto"
-              >
+              <Button size="lg" variant="secondary" onClick={() => navigate("/apply-host")} className="rounded-full text-base px-8 py-6 h-auto">
                 Host a Class
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
       
       <main ref={classesRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
 
