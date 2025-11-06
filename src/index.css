@@ -39,6 +39,9 @@
     /* Credit tokens - elegant neutrals */
     --topped-up-credit: 280 30% 50%;
     --teaching-credit: 40 80% 55%;
+    
+    /* Accent tan for hero */
+    --accent-tan: 30 35% 60%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 10%;

@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ['Domine', 'serif'],
-        sans: ['Satoshi', 'sans-serif'],
+        serif: ['Instrument Serif', 'serif'],
+        sans: ['Manrope', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -42,6 +42,7 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          tan: "hsl(var(--accent-tan))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
