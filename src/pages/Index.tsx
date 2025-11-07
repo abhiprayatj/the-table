@@ -99,7 +99,7 @@ export default function Index() {
       {!user && (
         <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-5xl sm:text-6xl font-sans font-medium mb-8 text-foreground leading-tight lg:text-5xl">
+            <h1 className="text-5xl sm:text-6xl font-serif font-medium mb-8 text-foreground leading-tight lg:text-5xl">
               Everyone's got something to share. Learn and connect on{" "}
               <span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
@@ -137,7 +137,7 @@ export default function Index() {
             <div className="flex justify-center">
               <Search className="w-12 h-12 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground">Discover 🔍</h3>
+            <h3 className="text-xl font-sans font-bold text-foreground">Discover 🔍</h3>
             <p className="text-muted-foreground">Browse classes in your city, from notion to coding</p>
           </div>
 
@@ -146,7 +146,7 @@ export default function Index() {
             <div className="flex justify-center">
               <Ticket className="w-12 h-12 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground">Book 🎟️</h3>
+            <h3 className="text-xl font-sans font-bold text-foreground">Book 🎟️</h3>
             <p className="text-muted-foreground">Reserve your spot for just £10 (5 credits)</p>
           </div>
 
@@ -155,7 +155,7 @@ export default function Index() {
             <div className="flex justify-center">
               <Sparkles className="w-12 h-12 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground">Learn ✨</h3>
+            <h3 className="text-xl font-sans font-bold text-foreground">Learn ✨</h3>
             <p className="text-muted-foreground">Show up, connect, and gain a new skill</p>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function Index() {
             <div className="flex flex-col items-start space-y-3">
               <div className="flex items-center gap-3">
                 <Users className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-semibold text-foreground">Small Groups</h3>
+                <h3 className="text-lg font-sans font-bold text-foreground">Small Groups</h3>
               </div>
               <p className="text-muted-foreground">Max 10 people per class. Actually get to know everyone.</p>
             </div>
@@ -182,7 +182,7 @@ export default function Index() {
             <div className="flex flex-col items-start space-y-3">
               <div className="flex items-center gap-3">
                 <ShieldCheck className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-semibold text-foreground">Verified Hosts</h3>
+                <h3 className="text-lg font-sans font-bold text-foreground">Verified Hosts</h3>
               </div>
               <p className="text-muted-foreground">All teachers are reviewed and approved by us.</p>
             </div>
@@ -191,7 +191,7 @@ export default function Index() {
             <div className="flex flex-col items-start space-y-3">
               <div className="flex items-center gap-3">
                 <Coins className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-semibold text-foreground">Earn While Teaching</h3>
+                <h3 className="text-lg font-sans font-bold text-foreground">Earn While Teaching</h3>
               </div>
               <p className="text-muted-foreground">Host a class, build community, earn credits.</p>
             </div>
