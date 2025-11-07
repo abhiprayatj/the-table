@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
 import { ClassCard } from "@/components/ClassCard";
+import Footer from "@/components/Footer";
 import { format, parseISO } from "date-fns";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
@@ -243,6 +244,8 @@ export default function Index() {
           </div>
         )}
       </main>
+      
+      <Footer onBrowseClassesClick={scrollToClasses} />
     </div>
   );
 }
