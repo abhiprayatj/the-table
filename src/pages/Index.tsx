@@ -104,7 +104,7 @@ export default function Index() {
             style={{ backgroundImage: `url(${heroBackground})` }}
           />
           <div className="absolute inset-0 bg-black/40" />
-          <div className="relative max-w-5xl mx-auto text-center z-10">
+          <div className="relative max-w-3xl mx-auto text-center z-10">
             <h1 className="text-5xl sm:text-6xl font-serif font-medium mb-8 text-white leading-tight lg:text-5xl">
               Everyone's got something to share. Learn and connect on{" "}
               <span className="font-bold text-[#f2b955]">the table.</span>
@@ -134,7 +134,7 @@ export default function Index() {
       )}
 
       {/* How It Works Section */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">How It Works</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -169,7 +169,7 @@ export default function Index() {
 
       {/* Why use the table? Section */}
       <section className="bg-muted/30 py-8 sm:py-12">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
             Why use the table?
           </h2>
@@ -205,7 +205,7 @@ export default function Index() {
         </div>
       </section>
 
-      <main ref={classesRef} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20">
+      <main ref={classesRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20">
         {loading ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Loading classes...</p>
