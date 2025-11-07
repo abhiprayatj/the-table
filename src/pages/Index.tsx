@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Search, Ticket, Sparkles, Users, ShieldCheck, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import heroBackground from "@/assets/hero-background.jpg";
 interface ClassWithHost {
   id: string;
   title: string;
@@ -97,9 +98,14 @@ export default function Index() {
       <Navigation />
 
       {!user && (
-        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
-          <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-5xl sm:text-6xl font-serif font-medium mb-8 text-foreground leading-tight lg:text-5xl">
+        <div className="relative flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24 min-h-[600px]">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroBackground})` }}
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative max-w-5xl mx-auto text-center z-10">
+            <h1 className="text-5xl sm:text-6xl font-serif font-medium mb-8 text-white leading-tight lg:text-5xl">
               Everyone's got something to share. Learn and connect on{" "}
               <span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
