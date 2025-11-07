@@ -96,8 +96,8 @@ export default function Index() {
       
       {!user && <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-medium mb-8 text-foreground leading-tight">
-              Everyone's got something to share. Learn on <span className="font-bold text-[#f2b955]">the table.</span>
+            <h1 className="text-5xl sm:text-6xl font-sans font-medium mb-8 text-foreground leading-tight lg:text-5xl">Everyone's got something to share 
+Learn and connect on the table<span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
