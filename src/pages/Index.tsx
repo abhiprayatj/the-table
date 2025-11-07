@@ -95,7 +95,7 @@ export default function Index() {
       <Navigation />
       
       {!user && <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-7xl mx-auto text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-medium mb-8 text-foreground leading-tight">
               Everyone's got something to share. Learn on <span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
@@ -113,7 +113,7 @@ export default function Index() {
           </div>
         </div>}
       
-      <main ref={classesRef} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
+      <main ref={classesRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
 
         {loading ? <div className="text-center py-12">
             <p className="text-muted-foreground">Loading classes...</p>
