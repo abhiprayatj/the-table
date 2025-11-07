@@ -106,21 +106,21 @@ export default function Index() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
-                size="lg"
+                size="default"
                 onClick={scrollToClasses}
-                className="rounded-full text-base px-8 py-6 h-auto bg-primary text-primary-foreground hover:bg-primary/90"
+                className="rounded-full text-sm px-6 py-3 h-auto bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Browse Classes
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button
-                size="lg"
+                size="default"
                 variant="secondary"
                 onClick={() => navigate("/apply-host")}
-                className="rounded-full text-base px-8 py-6 h-auto"
+                className="rounded-full text-sm px-6 py-3 h-auto"
               >
                 Host a Class
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
