@@ -56,54 +56,54 @@ export const ClassCard = ({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-accent/30">
-            <h3 className="text-lg font-serif font-medium text-center px-4 text-foreground/90">
+            <h3 className="text-sm font-serif font-medium text-center px-4 text-foreground/90">
               {title}
             </h3>
           </div>
         )}
       </div>
       
-      <CardContent className="p-4 space-y-3">
+      <CardContent className="p-3 space-y-2">
         <div>
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="font-serif font-medium text-lg leading-tight">{title}</h3>
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-serif font-medium text-base leading-tight">{title}</h3>
             <Badge variant="outline" className="shrink-0 text-xs">
               {category}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
             {description}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Avatar className="h-6 w-6">
+        <div className="flex items-center gap-1.5">
+          <Avatar className="h-5 w-5">
             <AvatarImage src={hostAvatar} />
             <AvatarFallback className="text-xs bg-muted">{hostName.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="text-sm text-foreground/80">{hostName}</span>
+          <span className="text-xs text-foreground/80">{hostName}</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground pt-2 border-t border-border/50">
+        <div className="grid grid-cols-2 gap-1.5 text-xs text-muted-foreground pt-1.5 border-t border-border/50">
           <div className="flex items-center gap-1.5">
-            <MapPin className="h-3.5 w-3.5" />
+            <MapPin className="h-3 w-3" />
             <span>{city}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5" />
+            <Clock className="h-3 w-3" />
             <span>{duration}h</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5" />
+            <Calendar className="h-3 w-3" />
             <span>{format(new Date(date), "MMM d")}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5" />
+            <Users className="h-3 w-3" />
             <span>{currentParticipants}/{maxParticipants}</span>
           </div>
         </div>
 
-        <div className="text-sm font-medium pt-1">
+        <div className="text-xs font-medium">
           {costCredits} credits
         </div>
       </CardContent>

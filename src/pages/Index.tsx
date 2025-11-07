@@ -126,7 +126,7 @@ export default function Index() {
                   {format(parseISO(date), "EEEE, MMMM d")}
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {dateClasses.map(classItem => <ClassCard key={classItem.id} id={classItem.id} title={classItem.title} description={classItem.description} thumbnailUrl={classItem.thumbnail_url || undefined} hostName={classItem.profiles.full_name} hostAvatar={classItem.profiles.avatar_url || undefined} city={classItem.city} country={classItem.country} date={classItem.date} time={classItem.time} duration={classItem.duration} costCredits={classItem.cost_credits} currentParticipants={classItem.bookings.length} maxParticipants={classItem.max_participants} category={classItem.category} />)}
                 </div>
               </div>)}
