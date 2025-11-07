@@ -94,7 +94,7 @@ export default function Index() {
   return <div className="min-h-screen bg-background">
       <Navigation />
       
-      {!user && <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      {!user && <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
           <div className="max-w-5xl mx-auto text-center">
             <h1 className="text-5xl sm:text-6xl font-sans font-medium mb-8 text-foreground leading-tight lg:text-5xl">Everyone's got something to share. Learn and connect on the table<span className="font-bold text-[#f2b955]">the table.</span>
             </h1>
@@ -113,7 +113,7 @@ export default function Index() {
         </div>}
       
       {/* How It Works Section */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
           How It Works
         </h2>
@@ -155,7 +155,7 @@ export default function Index() {
       </section>
 
       {/* Why use the table? Section */}
-      <section className="bg-muted/30 py-16 sm:py-20">
+      <section className="bg-muted/30 py-8 sm:py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
             Why use the table?
@@ -198,7 +198,7 @@ export default function Index() {
         </div>
       </section>
       
-      <main ref={classesRef} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
+      <main ref={classesRef} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20">
 
         {loading ? <div className="text-center py-12">
             <p className="text-muted-foreground">Loading classes...</p>
