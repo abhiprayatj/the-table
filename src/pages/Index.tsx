@@ -97,7 +97,7 @@ export default function Index() {
       <Navigation />
 
       {!user && (
-        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
+        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-5xl mx-auto text-center">
             <h1 className="text-5xl sm:text-6xl font-sans font-medium mb-8 text-foreground leading-tight lg:text-5xl">
               Everyone's got something to share. Learn and connect on{" "}
@@ -244,7 +244,7 @@ export default function Index() {
           </div>
         )}
       </main>
-      
+
       <Footer onBrowseClassesClick={scrollToClasses} />
     </div>
   );
