@@ -210,6 +210,7 @@ export default function Index() {
       )}
 
       <main ref={classesRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20">
+        <h1 className="text-3xl font-sans font-bold mb-8 text-foreground">Available Sessions</h1>
         {loading ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Loading classes...</p>
@@ -223,7 +224,7 @@ export default function Index() {
           <div className="space-y-16">
             {Object.entries(classesByDate).map(([date, dateClasses]) => (
               <div key={date}>
-                <h2 className="text-2xl font-serif font-medium mb-8 text-foreground">
+                <h2 className="text-2xl font-sans font-bold mb-8 text-foreground">
                   {format(parseISO(date), "EEEE, MMMM d")}
                 </h2>
 
