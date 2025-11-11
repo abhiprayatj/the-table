@@ -134,76 +134,80 @@ export default function Index() {
       )}
 
       {/* How It Works Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">How It Works</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Step 1: Discover */}
-          <div className="text-center space-y-4">
-            <div className="flex justify-center">
-              <Search className="w-12 h-12 text-accent" />
-            </div>
-            <h3 className="text-xl font-sans font-bold text-foreground">Discover 🔍</h3>
-            <p className="text-muted-foreground">Browse classes in your city, from notion to coding</p>
-          </div>
-
-          {/* Step 2: Book */}
-          <div className="text-center space-y-4">
-            <div className="flex justify-center">
-              <Ticket className="w-12 h-12 text-accent" />
-            </div>
-            <h3 className="text-xl font-sans font-bold text-foreground">Book 🎟️</h3>
-            <p className="text-muted-foreground">Reserve your spot for just £10 (5 credits)</p>
-          </div>
-
-          {/* Step 3: Learn */}
-          <div className="text-center space-y-4">
-            <div className="flex justify-center">
-              <Sparkles className="w-12 h-12 text-accent" />
-            </div>
-            <h3 className="text-xl font-sans font-bold text-foreground">Learn ✨</h3>
-            <p className="text-muted-foreground">Show up, connect, and gain a new skill</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Why use the table? Section */}
-      <section className="bg-muted/30 py-8 sm:py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
-            Why use the table?
-          </h2>
+      {!user && (
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">How It Works</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Benefit 1: Small Groups */}
-            <div className="flex flex-col items-start space-y-3">
-              <div className="flex items-center gap-3">
-                <Users className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-sans font-bold text-foreground">Small Groups</h3>
+            {/* Step 1: Discover */}
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <Search className="w-12 h-12 text-accent" />
               </div>
-              <p className="text-muted-foreground">Max 10 people per class. Actually get to know everyone.</p>
+              <h3 className="text-xl font-sans font-bold text-foreground">Discover 🔍</h3>
+              <p className="text-muted-foreground">Browse classes in your city, from notion to coding</p>
             </div>
 
-            {/* Benefit 2: Verified Hosts */}
-            <div className="flex flex-col items-start space-y-3">
-              <div className="flex items-center gap-3">
-                <ShieldCheck className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-sans font-bold text-foreground">Verified Hosts</h3>
+            {/* Step 2: Book */}
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <Ticket className="w-12 h-12 text-accent" />
               </div>
-              <p className="text-muted-foreground">All teachers are reviewed and approved by us.</p>
+              <h3 className="text-xl font-sans font-bold text-foreground">Book 🎟️</h3>
+              <p className="text-muted-foreground">Reserve your spot for just £10 (5 credits)</p>
             </div>
 
-            {/* Benefit 3: Earn While Teaching */}
-            <div className="flex flex-col items-start space-y-3">
-              <div className="flex items-center gap-3">
-                <Coins className="w-8 h-8 text-primary flex-shrink-0" />
-                <h3 className="text-lg font-sans font-bold text-foreground">Earn While Teaching</h3>
+            {/* Step 3: Learn */}
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <Sparkles className="w-12 h-12 text-accent" />
               </div>
-              <p className="text-muted-foreground">Host a class, build community, earn credits.</p>
+              <h3 className="text-xl font-sans font-bold text-foreground">Learn ✨</h3>
+              <p className="text-muted-foreground">Show up, connect, and gain a new skill</p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Why use the table? Section */}
+      {!user && (
+        <section className="bg-muted/30 py-8 sm:py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
+              Why use the table?
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Benefit 1: Small Groups */}
+              <div className="flex flex-col items-start space-y-3">
+                <div className="flex items-center gap-3">
+                  <Users className="w-8 h-8 text-primary flex-shrink-0" />
+                  <h3 className="text-lg font-sans font-bold text-foreground">Small Groups</h3>
+                </div>
+                <p className="text-muted-foreground">Max 10 people per class. Actually get to know everyone.</p>
+              </div>
+
+              {/* Benefit 2: Verified Hosts */}
+              <div className="flex flex-col items-start space-y-3">
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-8 h-8 text-primary flex-shrink-0" />
+                  <h3 className="text-lg font-sans font-bold text-foreground">Verified Hosts</h3>
+                </div>
+                <p className="text-muted-foreground">All teachers are reviewed and approved by us.</p>
+              </div>
+
+              {/* Benefit 3: Earn While Teaching */}
+              <div className="flex flex-col items-start space-y-3">
+                <div className="flex items-center gap-3">
+                  <Coins className="w-8 h-8 text-primary flex-shrink-0" />
+                  <h3 className="text-lg font-sans font-bold text-foreground">Earn While Teaching</h3>
+                </div>
+                <p className="text-muted-foreground">Host a class, build community, earn credits.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <main ref={classesRef} className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20">
         {loading ? (
