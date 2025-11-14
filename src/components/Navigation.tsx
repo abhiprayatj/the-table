@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { User } from "@supabase/supabase-js";
 import { Logo } from "@/components/Logo";
 
@@ -29,10 +29,12 @@ export const Navigation = ({ enableScrollTransition = false }: NavigationProps) 
   const [profile, setProfile] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const userIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      userIdRef.current = session?.user?.id ?? null;
       if (session?.user) {
         fetchUserData(session.user.id);
       }
@@ -41,6 +43,7 @@ export const Navigation = ({ enableScrollTransition = false }: NavigationProps) 
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      userIdRef.current = session?.user?.id ?? null;
       if (session?.user) {
         fetchUserData(session.user.id);
       } else {
@@ -48,7 +51,22 @@ export const Navigation = ({ enableScrollTransition = false }: NavigationProps) 
         setProfile(null);
       }
     });
+
     return () => subscription.unsubscribe();
+  }, []);
+
+  // Listen for credit updates from other components
+  useEffect(() => {
+    const handleCreditsUpdate = () => {
+      if (userIdRef.current) {
+        fetchUserData(userIdRef.current);
+      }
+    };
+    window.addEventListener("credits-updated", handleCreditsUpdate);
+
+    return () => {
+      window.removeEventListener("credits-updated", handleCreditsUpdate);
+    };
   }, []);
 
   // Scroll detection for homepage behavior
