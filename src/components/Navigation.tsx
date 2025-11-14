@@ -11,6 +11,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
+import { Logo } from "@/components/Logo";
 interface Credits {
   topped_up_balance: number;
   teaching_balance: number;
@@ -62,11 +63,15 @@ export const Navigation = () => {
     <nav className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-12">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <Logo className="w-8 h-8" />
             <span className="text-2xl font-serif font-medium text-foreground">the table</span>
           </Link>
 
           <div className="flex items-center space-x-6">
+            <Link to="/be-a-teacher" className="hidden sm:block text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Be a Teacher
+            </Link>
             {user ? (
               <>
                 {credits && (

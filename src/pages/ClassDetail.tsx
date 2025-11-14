@@ -2,19 +2,40 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin, Users, Coins, Lock } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Calendar, Clock, MapPin, Users, Coins, Loader2 } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@supabase/supabase-js";
+import { ClassHero } from "@/components/class-detail/ClassHero";
+import { OutcomeSection } from "@/components/class-detail/OutcomeSection";
+import { PrerequisitesSection } from "@/components/class-detail/PrerequisitesSection";
+import { WhatToBringSection } from "@/components/class-detail/WhatToBringSection";
+import { LogisticsCard } from "@/components/class-detail/LogisticsCard";
+import { FullDescription } from "@/components/class-detail/FullDescription";
+import { BookingSidebar } from "@/components/class-detail/BookingSidebar";
+import { StickyBookingBar } from "@/components/class-detail/StickyBookingBar";
 interface ClassDetail {
   id: string;
   title: string;
   description: string;
+  who_for: string | null;
+  prerequisites: string | null;
+  walk_away_with: string | null;
+  what_to_bring: string | null;
   thumbnail_url: string | null;
+  photo_urls: string[] | null;
   city: string;
   country: string;
   address: string;
@@ -52,6 +73,8 @@ export default function ClassDetail() {
   const [userCredits, setUserCredits] = useState<any>(null);
   const [isBooked, setIsBooked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   useEffect(() => {
     supabase.auth.getSession().then(({
       data: {
@@ -63,8 +86,11 @@ export default function ClassDetail() {
         fetchUserCredits(session.user.id);
       }
     });
+  }, []);
+
+  useEffect(() => {
     fetchClassDetails();
-  }, [id]);
+  }, [id, user]);
   const fetchClassDetails = async () => {
     try {
       const {
@@ -86,6 +112,8 @@ export default function ClassDetail() {
       if (user) {
         const userBooking = data.bookings.find((b: any) => b.user_id === user.id);
         setIsBooked(!!userBooking);
+      } else {
+        setIsBooked(false);
       }
     } catch (error) {
       console.error("Error fetching class:", error);
@@ -104,7 +132,7 @@ export default function ClassDetail() {
     } = await supabase.from("credits").select("*").eq("user_id", userId).single();
     setUserCredits(data);
   };
-  const handleBookClass = async () => {
+  const handleBookClick = () => {
     if (!user) {
       toast({
         title: "Login required",
@@ -114,6 +142,17 @@ export default function ClassDetail() {
       return;
     }
     if (!classData) return;
+    
+    // Check if user is the host
+    if (user.id === classData.host_id) {
+      toast({
+        title: "Cannot book your own class",
+        description: "You are the host of this class and cannot book it.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     const totalCredits = (userCredits?.topped_up_balance || 0) + (userCredits?.teaching_balance || 0);
     if (totalCredits < classData.cost_credits) {
       toast({
@@ -123,6 +162,44 @@ export default function ClassDetail() {
       });
       return;
     }
+    if (classData.bookings.length >= classData.max_participants) {
+      toast({
+        title: "Class full",
+        description: "This class is already full.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmBooking = async () => {
+    if (!user || !classData) return;
+    
+    // Safety check: prevent host from booking their own class
+    if (user.id === classData.host_id) {
+      toast({
+        title: "Cannot book your own class",
+        description: "You are the host of this class and cannot book it.",
+        variant: "destructive"
+      });
+      setShowConfirmDialog(false);
+      return;
+    }
+    
+    // Re-check availability and credits before booking
+    const totalCredits = (userCredits?.topped_up_balance || 0) + (userCredits?.teaching_balance || 0);
+    if (totalCredits < classData.cost_credits) {
+      toast({
+        title: "Insufficient credits",
+        description: `You need ${classData.cost_credits} credits to book this class. Top up now?`,
+        variant: "destructive"
+      });
+      setShowConfirmDialog(false);
+      return;
+    }
+
+    setIsProcessing(true);
     try {
       // Create booking
       const {
@@ -134,13 +211,13 @@ export default function ClassDetail() {
       if (bookingError) throw bookingError;
 
       // Deduct credits (prioritize teaching credits)
-      const teachingToUse = Math.min(userCredits.teaching_balance, classData.cost_credits);
+      const teachingToUse = Math.min(userCredits.teaching_balance || 0, classData.cost_credits);
       const toppedUpToUse = classData.cost_credits - teachingToUse;
       const {
         error: creditsError
       } = await supabase.from("credits").update({
-        teaching_balance: userCredits.teaching_balance - teachingToUse,
-        topped_up_balance: userCredits.topped_up_balance - toppedUpToUse
+        teaching_balance: (userCredits.teaching_balance || 0) - teachingToUse,
+        topped_up_balance: (userCredits.topped_up_balance || 0) - toppedUpToUse
       }).eq("user_id", user.id);
       if (creditsError) throw creditsError;
 
@@ -151,6 +228,8 @@ export default function ClassDetail() {
         amount: -classData.cost_credits,
         class_id: classData.id
       });
+      
+      setShowConfirmDialog(false);
       toast({
         title: "Yay! You're in! 🎉",
         description: "Your booking is confirmed. Check your email for details."
@@ -163,6 +242,8 @@ export default function ClassDetail() {
         description: error.message,
         variant: "destructive"
       });
+    } finally {
+      setIsProcessing(false);
     }
   };
   if (loading) {
@@ -181,31 +262,90 @@ export default function ClassDetail() {
         </div>
       </div>;
   }
-  return <div className="min-h-screen bg-background">
+  const seatsRemaining = classData.max_participants - classData.bookings.length;
+
+  return (
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <Navigation />
       
-      <main className="max-w-5xl px-4 sm:px-6 lg:px-8 py-12 mx-[100px]">
-        <div className="aspect-[21/9] rounded-lg overflow-hidden mb-12 bg-muted/30 border border-border/50">
-          {classData.thumbnail_url ? <img src={classData.thumbnail_url} alt={classData.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center bg-accent/20">
-              <h1 className="text-5xl font-serif font-medium text-center px-8">{classData.title}</h1>
-            </div>}
-        </div>
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <ClassHero
+          title={classData.title}
+          hostName={classData.profiles.full_name}
+          price={classData.cost_credits}
+          seatsRemaining={seatsRemaining}
+          thumbnailUrl={classData.thumbnail_url}
+          onBookClick={handleBookClick}
+          isBooked={isBooked}
+          isHost={user?.id === classData.host_id}
+        />
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* Content Sections */}
+        <div className="grid lg:grid-cols-3 gap-8 mt-12">
           <div className="lg:col-span-2 space-y-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-4xl font-serif font-medium">{classData.title}</h1>
-                <Badge variant="outline" className="text-xs">{classData.category}</Badge>
-              </div>
-              <p className="text-lg text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                {classData.description}
-              </p>
-            </div>
+            {/* Outcome Section */}
+            <OutcomeSection content={classData.walk_away_with} />
 
-            <Card className="border-border/50">
+            {/* Prerequisites Section */}
+            <PrerequisitesSection content={classData.prerequisites} />
+
+            {/* What to Bring Section */}
+            <WhatToBringSection content={classData.what_to_bring} />
+
+            {/* Logistics Card */}
+            <LogisticsCard
+              date={classData.date}
+              time={classData.time}
+              duration={classData.duration}
+              location={`${classData.city}, ${classData.country}`}
+              address={classData.address}
+              seatsRemaining={seatsRemaining}
+              maxParticipants={classData.max_participants}
+              isBooked={isBooked}
+              user={user}
+            />
+
+            {/* Full Description */}
+            <FullDescription content={classData.description} />
+
+            {/* Who For Section (if exists) */}
+            {classData.who_for && (
+              <Card className="border-border/50 shadow-sm">
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-serif font-medium mb-4">
+                    Who The Class is For
+                  </h2>
+                  <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    {classData.who_for}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Photos Section */}
+            {classData.photo_urls && classData.photo_urls.length > 0 && (
+              <Card className="border-border/50 shadow-sm">
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-serif font-medium mb-4">Photos</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {classData.photo_urls.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url}
+                        alt={`${classData.title} - Photo ${idx + 1}`}
+                        className="rounded-lg object-cover h-48 w-full border border-border/50"
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Host Info */}
+            <Card className="border-border/50 shadow-sm">
               <CardContent className="p-6">
-                <h2 className="text-xl font-serif font-medium mb-4">About Your Host</h2>
+                <h2 className="text-2xl font-serif font-medium mb-4">About Your Host</h2>
                 <div className="flex items-start gap-4">
                   <Avatar className="h-14 w-14">
                     <AvatarImage src={classData.profiles.avatar_url || undefined} />
@@ -223,8 +363,10 @@ export default function ClassDetail() {
               </CardContent>
             </Card>
 
-            {user && isBooked && <>
-                <Card className="bg-muted/20 border-border/50">
+            {/* Address & Participants (if booked) */}
+            {user && isBooked && (
+              <>
+                <Card className="bg-muted/20 border-border/50 shadow-sm">
                   <CardContent className="p-6">
                     <h2 className="text-xl font-serif font-medium mb-3 flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
@@ -234,14 +376,15 @@ export default function ClassDetail() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-border/50">
+                <Card className="border-border/50 shadow-sm">
                   <CardContent className="p-6">
                     <h2 className="text-xl font-serif font-medium mb-4 flex items-center gap-2">
                       <Users className="h-5 w-5" />
                       Who's Joining ({classData.bookings.length}/{classData.max_participants})
                     </h2>
                     <div className="space-y-3">
-                      {classData.bookings.map(booking => <div key={booking.id} className="flex items-center gap-3">
+                      {classData.bookings.map((booking) => (
+                        <div key={booking.id} className="flex items-center gap-3">
                           <Avatar className="h-10 w-10">
                             <AvatarImage src={booking.profiles.avatar_url || undefined} />
                             <AvatarFallback>
@@ -249,65 +392,142 @@ export default function ClassDetail() {
                             </AvatarFallback>
                           </Avatar>
                           <span className="font-medium">{booking.profiles.full_name}</span>
-                        </div>)}
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
-              </>}
-
-            {!user && <Card className="bg-muted/20 border-border/50">
-                <CardContent className="p-6 text-center">
-                  <Lock className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-                  <p className="text-muted-foreground text-sm">
-                    Log in to see the exact address and who's joining
-                  </p>
-                </CardContent>
-              </Card>}
+              </>
+            )}
           </div>
 
-          <div className="lg:col-span-1">
-            <Card className="sticky top-24 border-border/50">
-              <CardContent className="p-6 space-y-6">
-                <div className="text-3xl font-serif font-medium">
-                  {classData.cost_credits} credits
-                </div>
-
-                <div className="space-y-3 text-sm border-t border-border/50 pt-6">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-foreground/80">
-                      {format(parseISO(classData.date), "EEEE, MMMM d, yyyy")}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-foreground/80">
-                      {classData.time} ({classData.duration} hours)
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-foreground/80">
-                      {classData.city}, {classData.country}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Users className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-foreground/80">
-                      {classData.bookings.length}/{classData.max_participants} spots filled
-                    </span>
-                  </div>
-                </div>
-
-                {isBooked ? <div className="bg-accent/30 rounded-lg p-4 text-center border border-border/50">
-                    <p className="font-medium text-foreground">You're booked ✓</p>
-                  </div> : <Button onClick={handleBookClass} className="w-full" size="lg" disabled={classData.bookings.length >= classData.max_participants}>
-                    {classData.bookings.length >= classData.max_participants ? "Class Full" : `Book This Class`}
-                  </Button>}
-              </CardContent>
-            </Card>
+          {/* Desktop Sticky Sidebar */}
+          <div className="hidden lg:block lg:col-span-1">
+            <BookingSidebar
+              price={classData.cost_credits}
+              seatsRemaining={seatsRemaining}
+              isBooked={isBooked}
+              isHost={user?.id === classData.host_id}
+              onBookClick={handleBookClick}
+              userCredits={userCredits}
+            />
           </div>
         </div>
       </main>
-    </div>;
+
+      {/* Mobile Sticky Bottom Bar */}
+      <StickyBookingBar
+        price={classData.cost_credits}
+        seatsRemaining={seatsRemaining}
+        isBooked={isBooked}
+        isHost={user?.id === classData.host_id}
+        onBookClick={handleBookClick}
+        className="lg:hidden"
+      />
+
+      <AlertDialog 
+        open={showConfirmDialog} 
+        onOpenChange={(open) => {
+          if (!isProcessing) {
+            setShowConfirmDialog(open);
+          }
+        }}
+      >
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Booking</AlertDialogTitle>
+            <AlertDialogDescription>
+              You're about to book this class. Please review the details below.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {classData && (
+            <div className="space-y-4 py-4">
+              {/* Class Summary */}
+              <div className="space-y-2 p-4 bg-muted/30 rounded-lg border border-border/50">
+                <h3 className="font-serif font-medium text-lg">{classData.title}</h3>
+                <div className="space-y-1.5 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{format(parseISO(classData.date), "EEEE, MMMM d, yyyy")}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>{classData.time} ({classData.duration} hours)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-3.5 w-3.5" />
+                    <span>{classData.city}, {classData.country}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Credit Breakdown */}
+              {userCredits && (
+                <div className="space-y-3 p-4 bg-muted/30 rounded-lg border border-border/50">
+                  <div className="flex items-center gap-2">
+                    <Coins className="h-5 w-5 text-primary" />
+                    <h4 className="font-medium">Credits Breakdown</h4>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Total to deduct:</span>
+                      <span className="font-medium">{classData.cost_credits} credits</span>
+                    </div>
+                    
+                    <div className="border-t border-border/50 pt-2 space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Current balance:</span>
+                        <span className="font-medium">
+                          {(userCredits.topped_up_balance || 0) + (userCredits.teaching_balance || 0)} credits
+                        </span>
+                      </div>
+                      <div className="pl-4 space-y-1 text-xs text-muted-foreground">
+                        <div className="flex justify-between">
+                          <span>• Teaching credits:</span>
+                          <span>{userCredits.teaching_balance || 0} credits</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>• Topped up credits:</span>
+                          <span>{userCredits.topped_up_balance || 0} credits</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-border/50 pt-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Remaining after:</span>
+                        <span className="font-medium text-primary">
+                          {((userCredits.topped_up_balance || 0) + (userCredits.teaching_balance || 0)) - classData.cost_credits} credits
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isProcessing}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmBooking}
+              disabled={isProcessing}
+              className="min-w-[100px]"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Confirm"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
 }

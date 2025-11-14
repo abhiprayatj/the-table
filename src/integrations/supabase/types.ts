@@ -67,9 +67,14 @@ export type Database = {
           host_id: string
           id: string
           max_participants: number | null
+          photo_urls: string[] | null
+          prerequisites: string | null
           thumbnail_url: string | null
           time: string
           title: string
+          walk_away_with: string | null
+          what_to_bring: string | null
+          who_for: string | null
         }
         Insert: {
           address: string
@@ -84,9 +89,14 @@ export type Database = {
           host_id: string
           id?: string
           max_participants?: number | null
+          photo_urls?: string[] | null
+          prerequisites?: string | null
           thumbnail_url?: string | null
           time: string
           title: string
+          walk_away_with?: string | null
+          what_to_bring?: string | null
+          who_for?: string | null
         }
         Update: {
           address?: string
@@ -101,9 +111,14 @@ export type Database = {
           host_id?: string
           id?: string
           max_participants?: number | null
+          photo_urls?: string[] | null
+          prerequisites?: string | null
           thumbnail_url?: string | null
           time?: string
           title?: string
+          walk_away_with?: string | null
+          what_to_bring?: string | null
+          who_for?: string | null
         }
         Relationships: [
           {

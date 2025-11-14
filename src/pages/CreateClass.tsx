@@ -13,12 +13,16 @@ import { z } from "zod";
 
 const classSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
+  who_for: z.string().min(10, "Please describe who this class is for"),
+  prerequisites: z.string().optional(),
+  walk_away_with: z.string().min(10, "Please describe what participants will learn"),
   description: z.string().min(20, "Description must be at least 20 characters"),
-  category: z.string().min(1, "Please select a category"),
+  what_to_bring: z.string().optional(),
   address: z.string().min(5, "Address is required"),
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
   duration: z.number().min(1, "Duration must be at least 1 hour").max(8, "Duration cannot exceed 8 hours"),
+  max_participants: z.number().min(1).max(10),
 });
 
 const CATEGORIES = [
@@ -41,12 +45,20 @@ export default function CreateClass() {
   const [profile, setProfile] = useState<any>(null);
 
   const [title, setTitle] = useState("");
+  const [whoFor, setWhoFor] = useState("");
+  const [prerequisites, setPrerequisites] = useState("");
+  const [walkAwayWith, setWalkAwayWith] = useState("");
   const [description, setDescription] = useState("");
+  const [whatToBring, setWhatToBring] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [duration, setDuration] = useState("2");
+  const [maxParticipants, setMaxParticipants] = useState("10");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -79,6 +91,58 @@ export default function CreateClass() {
     setProfile(profileData);
   };
 
+  const handlePhotoUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    
+    setUploadingPhotos(true);
+    const uploadedUrls: string[] = [];
+    
+    try {
+      for (const file of Array.from(files)) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(7)}-${Date.now()}.${fileExt}`;
+        const filePath = `class-photos/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('class-photos')
+          .upload(filePath, file);
+
+        if (uploadError) {
+          toast({
+            title: "Upload failed",
+            description: `Failed to upload ${file.name}: ${uploadError.message}`,
+            variant: "destructive",
+          });
+          continue;
+        }
+
+        const { data } = supabase.storage
+          .from('class-photos')
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(data.publicUrl);
+      }
+      
+      setPhotoUrls([...photoUrls, ...uploadedUrls]);
+      toast({
+        title: "Photos uploaded",
+        description: `Successfully uploaded ${uploadedUrls.length} photo(s)`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Upload error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingPhotos(false);
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotoUrls(photoUrls.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -87,12 +151,16 @@ export default function CreateClass() {
       // Validate input
       classSchema.parse({
         title,
+        who_for: whoFor,
+        prerequisites: prerequisites || undefined,
+        walk_away_with: walkAwayWith,
         description,
-        category,
+        what_to_bring: whatToBring || undefined,
         address,
         date,
         time,
         duration: parseInt(duration),
+        max_participants: parseInt(maxParticipants),
       });
 
       const { data, error } = await supabase
@@ -100,7 +168,11 @@ export default function CreateClass() {
         .insert({
           host_id: profile.id,
           title,
+          who_for: whoFor,
+          prerequisites: prerequisites || null,
+          walk_away_with: walkAwayWith,
           description,
+          what_to_bring: whatToBring || null,
           category,
           city: profile.city,
           country: profile.country,
@@ -108,8 +180,10 @@ export default function CreateClass() {
           date,
           time,
           duration: parseInt(duration),
-          cost_credits: 5,
-          max_participants: 10,
+          cost_credits: 10, // Auto-set to 10 credits
+          max_participants: parseInt(maxParticipants),
+          photo_urls: photoUrls.length > 0 ? photoUrls : null,
+          thumbnail_url: photoUrls[0] || null, // Use first photo as thumbnail
         })
         .select()
         .single();
@@ -177,14 +251,60 @@ export default function CreateClass() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="who_for">Who The Class is For</Label>
+                <Textarea
+                  id="who_for"
+                  value={whoFor}
+                  onChange={(e) => setWhoFor(e.target.value)}
+                  placeholder="Describe who would benefit from this class..."
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="prerequisites">Prerequisite / You Should Already Know</Label>
+                <Textarea
+                  id="prerequisites"
+                  value={prerequisites}
+                  onChange={(e) => setPrerequisites(e.target.value)}
+                  placeholder="What should participants already know or have experience with? (optional)"
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="walk_away_with">What You Will Walk Away With</Label>
+                <Textarea
+                  id="walk_away_with"
+                  value={walkAwayWith}
+                  onChange={(e) => setWalkAwayWith(e.target.value)}
+                  placeholder="What skills, knowledge, or items will participants gain?"
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What will participants learn? What should they expect?"
+                  placeholder="Detailed description of the class..."
                   rows={5}
                   required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="what_to_bring">What to Bring</Label>
+                <Textarea
+                  id="what_to_bring"
+                  value={whatToBring}
+                  onChange={(e) => setWhatToBring(e.target.value)}
+                  placeholder="List any materials, tools, or items participants should bring... (optional)"
+                  rows={2}
                 />
               </div>
 
@@ -205,7 +325,7 @@ export default function CreateClass() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address">Exact Address</Label>
+                <Label htmlFor="address">Location</Label>
                 <Input
                   id="address"
                   value={address}
@@ -242,14 +362,51 @@ export default function CreateClass() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration">Duration (hours)</Label>
+                <Label htmlFor="photos">Photos</Label>
                 <Input
-                  id="duration"
+                  id="photos"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handlePhotoUpload(e.target.files)}
+                  disabled={uploadingPhotos}
+                />
+                {uploadingPhotos && (
+                  <p className="text-xs text-muted-foreground">Uploading photos...</p>
+                )}
+                {photoUrls.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {photoUrls.map((url, idx) => (
+                      <div key={idx} className="relative group">
+                        <img 
+                          src={url} 
+                          alt={`Photo ${idx + 1}`} 
+                          className="rounded-lg object-cover h-24 w-full border border-border/50"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(idx)}
+                          className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="max_participants">Seats (max 10)</Label>
+                <Input
+                  id="max_participants"
                   type="number"
                   min="1"
-                  max="8"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
+                  max="10"
+                  value={maxParticipants}
+                  onChange={(e) => setMaxParticipants(e.target.value)}
                   required
                 />
               </div>
@@ -257,8 +414,8 @@ export default function CreateClass() {
               <div className="bg-muted/30 p-5 rounded-lg space-y-2 border border-border/50">
                 <p className="text-sm font-medium">Class Details:</p>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Cost: 5 credits</li>
-                  <li>• Max participants: 10</li>
+                  <li>• Price: 10 credits (auto-set)</li>
+                  <li>• Max participants: {maxParticipants}</li>
                   <li>• Location: {profile.city}, {profile.country}</li>
                 </ul>
               </div>
