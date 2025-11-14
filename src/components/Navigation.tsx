@@ -114,6 +114,12 @@ export const Navigation = ({ enableScrollTransition = false }: NavigationProps) 
 
           <div className="flex items-center space-x-6">
             <Link
+              to="/classes"
+              className={`hidden sm:block text-sm transition-colors duration-300 ${mutedTextClasses}`}
+            >
+              Browse Classes
+            </Link>
+            <Link
               to="/be-a-teacher"
               className={`hidden sm:block text-sm transition-colors duration-300 ${mutedTextClasses}`}
             >
