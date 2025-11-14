@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const reviews = [
   {
@@ -29,38 +31,90 @@ const reviews = [
 ];
 
 export function ReviewsSection() {
-  return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 className="text-3xl sm:text-4xl font-serif font-medium text-center mb-12 text-foreground">
-        What People Are Saying
-      </h2>
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-      <Carousel className="w-full">
-        <CarouselContent className="-ml-2 md:-ml-4">
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return;
+
+    const container = scrollContainerRef.current;
+    const firstCard = container.querySelector(".review-card") as HTMLElement;
+    if (!firstCard) return;
+
+    const cardWidth = firstCard.offsetWidth;
+    const gap = 16; // space-x-4 = 1rem = 16px
+    const scrollAmount = cardWidth + gap;
+
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <section className="max-w-5xl mx-auto px-4 py-12 sm:py-16 w-full">
+      <div className="w-full flex justify-center mb-8 sm:mb-12">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-medium text-center text-foreground">
+          What People Are Saying
+        </h2>
+      </div>
+
+      <div className="relative">
+        {/* Desktop scroll buttons */}
+        <div className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+            onClick={() => scroll("left")}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="sr-only">Scroll left</span>
+          </Button>
+        </div>
+
+        {/* Scrollable container */}
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth pb-4 -mx-4 px-4 md:mx-0 md:px-0"
+        >
           {reviews.map((review, index) => (
-            <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/2">
-              <Card className="border-border/50 h-full">
-                <CardContent className="p-6 space-y-4">
+            <div
+              key={index}
+              className="review-card w-full sm:w-auto min-w-0 sm:min-w-[320px] lg:min-w-[360px] snap-start flex-shrink-0"
+            >
+              <Card className="border-border/50 h-full shadow-sm rounded-xl w-full">
+                <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                   <div>
-                    <h3 className="font-serif font-medium text-lg text-foreground">
+                    <h3 className="font-serif font-medium text-base sm:text-lg text-foreground">
                       {review.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{review.role}</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{review.role}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground italic">
+                  <p className="text-xs sm:text-sm text-muted-foreground italic">
                     Attended: {review.classAttended}
                   </p>
-                  <blockquote className="text-foreground leading-relaxed">
+                  <blockquote className="text-sm sm:text-base text-foreground leading-relaxed break-words">
                     "{review.quote}"
                   </blockquote>
                 </CardContent>
               </Card>
-            </CarouselItem>
+            </div>
           ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+        </div>
+
+        {/* Desktop scroll buttons */}
+        <div className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+            onClick={() => scroll("right")}
+          >
+            <ChevronRight className="h-4 w-4" />
+            <span className="sr-only">Scroll right</span>
+          </Button>
+        </div>
+      </div>
     </section>
   );
 }

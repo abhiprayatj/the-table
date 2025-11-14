@@ -110,3 +110,15 @@
     @apply font-serif;
   }
 }
+
+/* Hide scrollbar for horizontal scrollable sections */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

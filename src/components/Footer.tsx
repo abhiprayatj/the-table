@@ -10,7 +10,7 @@ const Footer = ({ onBrowseClassesClick }: FooterProps) => {
       <div className="max-w-5xl mx-auto flex flex-col items-center text-center space-y-8">
         {/* Call to Action */}
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif">
-          start building a connected skill
+          We take you from 0 to 1, so you can go from 1 to 1000.
         </h2>
 
         {/* Navigation Links */}

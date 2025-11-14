@@ -95,7 +95,7 @@ export default function Index() {
   const displayedClasses = classes.slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
       <Navigation enableScrollTransition={true} />
 
       {/* Section 1: Hero */}
