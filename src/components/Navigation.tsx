@@ -12,16 +12,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { Logo } from "@/components/Logo";
+
 interface Credits {
   topped_up_balance: number;
   teaching_balance: number;
 }
-export const Navigation = () => {
+
+interface NavigationProps {
+  enableScrollTransition?: boolean;
+}
+
+export const Navigation = ({ enableScrollTransition = false }: NavigationProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [credits, setCredits] = useState<Credits | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -42,6 +50,26 @@ export const Navigation = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  // Scroll detection for homepage behavior
+  useEffect(() => {
+    if (!enableScrollTransition) return;
+
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [enableScrollTransition]);
+
   const fetchUserData = async (userId: string) => {
     const { data: creditsData } = await supabase.from("credits").select("*").eq("user_id", userId).single();
     const { data: profileData } = await supabase.from("profiles").select("*").eq("id", userId).single();
@@ -55,27 +83,46 @@ export const Navigation = () => {
     setProfile(profileData);
     setIsAdmin(adminCheck || false);
   };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
   };
+
+  // Conditional classes based on scroll state
+  const baseNavClasses = "fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out";
+  
+  const navClasses = enableScrollTransition
+    ? scrolled
+      ? `${baseNavClasses} bg-white text-black shadow-sm`
+      : `${baseNavClasses} bg-transparent text-white shadow-none`
+    : "border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50";
+
+  const textClasses = enableScrollTransition && !scrolled ? "text-white" : "text-foreground";
+  const mutedTextClasses = enableScrollTransition && !scrolled ? "text-white/90 hover:text-white" : "text-muted-foreground hover:text-foreground";
+
   return (
-    <nav className="border-b border-border/50 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+    <nav className={navClasses}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-12">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className={`flex items-center gap-2 transition-colors duration-300 ${textClasses}`}>
             <Logo className="w-8 h-8" />
-            <span className="text-2xl font-serif font-medium text-foreground">the table</span>
+            <span className={`text-2xl font-serif font-medium transition-colors duration-300 ${textClasses}`}>
+              the table
+            </span>
           </Link>
 
           <div className="flex items-center space-x-6">
-            <Link to="/be-a-teacher" className="hidden sm:block text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              to="/be-a-teacher"
+              className={`hidden sm:block text-sm transition-colors duration-300 ${mutedTextClasses}`}
+            >
               Be a Teacher
             </Link>
             {user ? (
               <>
                 {credits && (
-                  <div className="hidden sm:flex items-center gap-3 text-sm">
+                  <div className={`hidden sm:flex items-center gap-3 text-sm transition-colors duration-300 ${textClasses}`}>
                     <div className="flex items-center gap-1.5">
                       <div className="w-2 h-2 rounded-full bg-[hsl(var(--topped-up-credit))]" />
                       <span className="font-medium">{credits.topped_up_balance}</span>
@@ -92,7 +139,13 @@ export const Navigation = () => {
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
                       <Avatar className="h-9 w-9">
                         <AvatarImage src={profile?.avatar_url} />
-                        <AvatarFallback className="bg-muted text-foreground text-sm">
+                        <AvatarFallback
+                          className={`transition-colors duration-300 ${
+                            enableScrollTransition && !scrolled
+                              ? "bg-white/20 text-white"
+                              : "bg-muted text-foreground"
+                          } text-sm`}
+                        >
                           {profile?.full_name?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
@@ -118,10 +171,21 @@ export const Navigation = () => {
               </>
             ) : (
               <>
-                <Button variant="ghost" onClick={() => navigate("/auth")} className="text-sm">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate("/auth")}
+                  className={`text-sm transition-colors duration-300 ${mutedTextClasses}`}
+                >
                   Log In
                 </Button>
-                <Button onClick={() => navigate("/auth?mode=signup")} className="text-sm">
+                <Button
+                  onClick={() => navigate("/auth?mode=signup")}
+                  className={`text-sm transition-colors duration-300 ${
+                    enableScrollTransition && !scrolled
+                      ? "bg-white/20 hover:bg-white/30 text-white border-white/30"
+                      : ""
+                  }`}
+                >
                   Sign Up
                 </Button>
               </>

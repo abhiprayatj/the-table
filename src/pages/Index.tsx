@@ -96,7 +96,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navigation />
+      <Navigation enableScrollTransition={true} />
 
       {/* Section 1: Hero */}
       <HeroSection onBrowseClassesClick={scrollToClasses} />
