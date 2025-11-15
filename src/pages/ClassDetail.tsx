@@ -298,7 +298,7 @@ export default function ClassDetail() {
               date={classData.date}
               time={classData.time}
               duration={classData.duration}
-              location={`${classData.city}, ${classData.country}`}
+              location={classData.city}
               address={classData.address}
               seatsRemaining={seatsRemaining}
               maxParticipants={classData.max_participants}
@@ -457,7 +457,7 @@ export default function ClassDetail() {
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="h-3.5 w-3.5" />
-                    <span>{classData.city}, {classData.country}</span>
+                    <span>{classData.city}</span>
                   </div>
                 </div>
               </div>

@@ -101,7 +101,7 @@ export const ClassCard = ({
       
       <CardContent className="p-4 flex flex-col flex-1">
         {/* Title */}
-        <h3 className="font-serif font-semibold text-base leading-tight text-foreground group-hover:text-primary transition-colors mb-2">
+        <h3 className="font-sans font-bold text-xl leading-tight text-foreground group-hover:text-primary transition-colors mb-2">
           {title}
         </h3>
 

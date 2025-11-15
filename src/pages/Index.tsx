@@ -42,6 +42,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const classesRef = useRef<HTMLDivElement>(null);
+  const learningInterestRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,6 +92,12 @@ export default function Index() {
     });
   };
 
+  const scrollToLearningInterest = () => {
+    learningInterestRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   // Get first 6 classes for horizontal scroll
   const displayedClasses = classes.slice(0, 6);
 
@@ -111,7 +118,9 @@ export default function Index() {
       <CreditsSection />
 
       {/* Section 5: Learning Interest Form */}
-      <LearningInterestForm />
+      <div ref={learningInterestRef} id="learning-interest">
+        <LearningInterestForm />
+      </div>
 
       {/* Section 6: Current Classes */}
       <section ref={classesRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
@@ -138,10 +147,13 @@ export default function Index() {
             <p className="text-muted-foreground mb-2 text-lg">No upcoming classes available.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto pb-4 -mx-4 sm:mx-0 px-4 sm:px-0">
-            <div className="flex gap-4 min-w-max sm:min-w-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="overflow-x-auto pb-4 -mx-4 sm:mx-0 px-4 sm:px-6 lg:px-8 scrollbar-hide scroll-smooth snap-x snap-mandatory">
+            <div className="flex gap-6 min-w-max pr-4 sm:pr-6 lg:pr-8">
               {displayedClasses.map((classItem) => (
-                <div key={classItem.id} className="w-[280px] sm:w-auto flex-shrink-0 sm:flex-shrink">
+                <div 
+                  key={classItem.id} 
+                  className="w-[80vw] sm:w-[280px] md:w-[300px] lg:w-[320px] min-w-[80vw] sm:min-w-[280px] md:min-w-[300px] lg:min-w-[320px] flex-shrink-0 snap-start"
+                >
                   <ClassCard
                     id={classItem.id}
                     title={classItem.title}
@@ -169,7 +181,9 @@ export default function Index() {
       {/* Section 7: Reviews */}
       <ReviewsSection />
 
-      <Footer onBrowseClassesClick={scrollToClasses} />
+      <Footer 
+        onTopicOfInterestClick={scrollToLearningInterest}
+      />
     </div>
   );
 }

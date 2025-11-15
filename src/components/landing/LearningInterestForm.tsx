@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,29 @@ export function LearningInterestForm() {
   const [popularInterests, setPopularInterests] = useState<string[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
+
+  const pastelColors = [
+    "bg-pink-300",
+    "bg-blue-300",
+    "bg-green-300",
+    "bg-purple-300",
+    "bg-yellow-300",
+    "bg-orange-300",
+  ];
+
+  // Create a stable color mapping for each interest
+  const interestColors = useMemo(() => {
+    const colorMap = new Map<string, string>();
+    popularInterests.forEach((interest) => {
+      if (!colorMap.has(interest)) {
+        colorMap.set(
+          interest,
+          pastelColors[Math.floor(Math.random() * pastelColors.length)]
+        );
+      }
+    });
+    return colorMap;
+  }, [popularInterests]);
 
   useEffect(() => {
     fetchPopularInterests();
@@ -108,15 +131,18 @@ export function LearningInterestForm() {
           {popularInterests.length > 0 && (
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-2">Popular interests:</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {popularInterests.map((popular, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-background border border-border/50 rounded-full text-sm text-foreground"
-                  >
-                    {popular}
-                  </span>
-                ))}
+              <div className="flex flex-wrap justify-center gap-3">
+                {popularInterests.map((popular, index) => {
+                  const color = interestColors.get(popular) || pastelColors[0];
+                  return (
+                    <span
+                      key={index}
+                      className={`${color} text-white rounded-full px-4 py-1 text-sm font-medium hover:opacity-80 transition`}
+                    >
+                      {popular}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}

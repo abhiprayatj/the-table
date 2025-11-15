@@ -33,7 +33,7 @@ export function ValueProposition() {
       <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
         <div className="space-y-6">
           <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-            Join 60-minute, peer-led sessions with up to 7 people. Learn directly, ask freely, and walk away with something you can actually use.
+            Join 60-minute, offline sessions with up to 7 people. Learn directly, ask freely, and walk away with something you can actually use.
           </p>
           <Button
             onClick={() => navigate("/auth?mode=signup")}
@@ -65,7 +65,7 @@ export function ValueProposition() {
         <blockquote className="text-lg sm:text-xl font-serif italic text-foreground text-center max-w-2xl mx-auto">
           "This is the first time I actually understood something in one hour."
           <footer className="mt-4 text-base font-sans not-italic text-muted-foreground">
-            — Placeholder Name, Attended: Notion Basics
+            — Attended: Notion Basics
           </footer>
         </blockquote>
       </div>

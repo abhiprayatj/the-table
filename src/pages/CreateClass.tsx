@@ -18,7 +18,8 @@ const classSchema = z.object({
   walk_away_with: z.string().min(10, "Please describe what participants will learn"),
   description: z.string().min(20, "Description must be at least 20 characters"),
   what_to_bring: z.string().optional(),
-  address: z.string().min(5, "Address is required"),
+  detailed_address: z.string().min(1, "Detailed address is required"),
+  city: z.string().min(1, "City is required"),
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
   duration: z.number().min(1, "Duration must be at least 1 hour").max(8, "Duration cannot exceed 8 hours"),
@@ -51,10 +52,12 @@ export default function CreateClass() {
   const [description, setDescription] = useState("");
   const [whatToBring, setWhatToBring] = useState("");
   const [category, setCategory] = useState("");
-  const [address, setAddress] = useState("");
+  const [customCategory, setCustomCategory] = useState("");
+  const [detailedAddress, setDetailedAddress] = useState("");
+  const [city, setCity] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [duration, setDuration] = useState("2");
+  const [duration, setDuration] = useState("1");
   const [maxParticipants, setMaxParticipants] = useState("10");
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
@@ -148,6 +151,17 @@ export default function CreateClass() {
     setLoading(true);
 
     try {
+      // Validate custom category if "Other" is selected
+      if (category === "Other" && !customCategory.trim()) {
+        toast({
+          title: "Validation error",
+          description: "Please enter a custom category",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       // Validate input
       classSchema.parse({
         title,
@@ -156,7 +170,8 @@ export default function CreateClass() {
         walk_away_with: walkAwayWith,
         description,
         what_to_bring: whatToBring || undefined,
-        address,
+        detailed_address: detailedAddress,
+        city: city,
         date,
         time,
         duration: parseInt(duration),
@@ -173,14 +188,14 @@ export default function CreateClass() {
           walk_away_with: walkAwayWith,
           description,
           what_to_bring: whatToBring || null,
-          category,
-          city: profile.city,
-          country: profile.country,
-          address,
+          category: category === "Other" ? customCategory : category,
+          city: city,
+          country: "", // Empty as we only use city now
+          address: detailedAddress,
           date,
           time,
           duration: parseInt(duration),
-          cost_credits: 10, // Auto-set to 10 credits
+          cost_credits: 5, // Auto-set to 5 credits
           max_participants: parseInt(maxParticipants),
           photo_urls: photoUrls.length > 0 ? photoUrls : null,
           thumbnail_url: photoUrls[0] || null, // Use first photo as thumbnail
@@ -310,7 +325,15 @@ export default function CreateClass() {
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select value={category} onValueChange={setCategory}>
+                <Select 
+                  value={category} 
+                  onValueChange={(value) => {
+                    setCategory(value);
+                    if (value !== "Other") {
+                      setCustomCategory("");
+                    }
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -322,19 +345,44 @@ export default function CreateClass() {
                     ))}
                   </SelectContent>
                 </Select>
+                {category === "Other" && (
+                  <div className="mt-2">
+                    <Input
+                      id="custom_category"
+                      value={customCategory}
+                      onChange={(e) => setCustomCategory(e.target.value)}
+                      placeholder="Enter your category"
+                      required
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address">Location</Label>
+                <Label htmlFor="detailed_address">Detailed Address</Label>
                 <Input
-                  id="address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Full street address (revealed after booking)"
+                  id="detailed_address"
+                  value={detailedAddress}
+                  onChange={(e) => setDetailedAddress(e.target.value)}
+                  placeholder="e.g., SW5"
                   required
                 />
                 <p className="text-xs text-muted-foreground">
-                  Only city will be shown publicly. Full address revealed after booking.
+                  Postcode or area code (revealed after booking)
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g., London"
+                  required
+                />
+                <p className="text-xs text-muted-foreground">
+                  City will be shown publicly
                 </p>
               </div>
 
@@ -414,9 +462,9 @@ export default function CreateClass() {
               <div className="bg-muted/30 p-5 rounded-lg space-y-2 border border-border/50">
                 <p className="text-sm font-medium">Class Details:</p>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Price: 10 credits (auto-set)</li>
+                  <li>• Price: 5 credits (auto-set)</li>
                   <li>• Max participants: {maxParticipants}</li>
-                  <li>• Location: {profile.city}, {profile.country}</li>
+                  <li>• Location: {city}</li>
                 </ul>
               </div>
 
