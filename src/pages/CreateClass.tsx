@@ -23,7 +23,7 @@ const classSchema = z.object({
   date: z.string().min(1, "Date is required"),
   time: z.string().min(1, "Time is required"),
   duration: z.number().min(1, "Duration must be at least 1 hour").max(8, "Duration cannot exceed 8 hours"),
-  max_participants: z.number().min(1).max(10),
+  max_participants: z.number().min(1).max(7),
 });
 
 const CATEGORIES = [
@@ -58,7 +58,7 @@ export default function CreateClass() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [duration, setDuration] = useState("1");
-  const [maxParticipants, setMaxParticipants] = useState("10");
+  const [maxParticipants, setMaxParticipants] = useState("7");
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
@@ -447,12 +447,12 @@ export default function CreateClass() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="max_participants">Seats (max 10)</Label>
+                <Label htmlFor="max_participants">Seats (max 7)</Label>
                 <Input
                   id="max_participants"
                   type="number"
                   min="1"
-                  max="10"
+                  max="7"
                   value={maxParticipants}
                   onChange={(e) => setMaxParticipants(e.target.value)}
                   required

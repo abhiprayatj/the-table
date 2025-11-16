@@ -54,8 +54,8 @@ function ImagePlaceholder({ width, height, className = "" }: { width: number; he
 function TestimonialCard({ name, topic, quote }: { name: string; topic: string; quote: string }) {
   return (
     <Card className="p-6 h-full">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-full bg-muted flex-shrink-0 flex items-center justify-center">
+      <div className="md:flex items-start gap-4">
+        <div className="hidden md:flex w-12 h-12 rounded-full bg-muted flex-shrink-0 items-center justify-center">
           <UserRound className="h-6 w-6 text-muted-foreground" />
         </div>
         <div className="flex-1">
@@ -393,19 +393,19 @@ export default function BeATeacher() {
           </h2>
           <div className="grid sm:grid-cols-3 gap-6">
             <TestimonialCard
-              name="Sarah Chen"
-              topic="Taught: Introduction to Pottery"
-              quote="Teaching my first class was nerve-wracking, but the small group size made it feel like sharing with friends. I earned credits and made genuine connections."
+              name="Jeff Cheng"
+              topic="Taught: Notion for Life Planning"
+              quote="Teaching Notion was fun — the small group meant I could personalise the setup for each person. Watching them leave with a workspace they could actually use the next day felt great."
             />
             <TestimonialCard
-              name="Marcus Johnson"
-              topic="Taught: Basic Web Development"
-              quote="The platform handles all the logistics, so I can focus on what I love—teaching. The credit system is straightforward and fair."
+              name="Abhipraya Tjondronegoro"
+              topic="Taught: Intro to Adobe Illustrator"
+              quote="In a group of seven, it was easy to guide everyone through their first logo. Hearing someone say, ‘I finally understand the pen tool,’ made the whole session worth it."
             />
             <TestimonialCard
-              name="Emma Williams"
-              topic="Taught: Sourdough Bread Making"
-              quote="I've taught three classes now and each one has been rewarding. Students are engaged, and I've learned so much from their questions."
+              name="Nora Alharthi"
+              topic="Taught: How to Perform Basic Research"
+              quote="With a small class, we turned research from something intimidating into something practical. By the end, everyone could frame a clear research question — and that was incredibly rewarding."
             />
           </div>
         </section>

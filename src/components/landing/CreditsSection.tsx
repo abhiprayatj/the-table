@@ -29,13 +29,13 @@ const packages: CreditPackage[] = [
   {
     name: "Starter",
     credits: 5,
-    price: 19.99,
+    price: 24.99,
     benefit: "Perfect for trying out a class",
   },
   {
     name: "Standard",
     credits: 15,
-    price: 55.99,
+    price: 64.99,
     benefit: "Great for regular learners",
     badge: "Most popular",
   },
