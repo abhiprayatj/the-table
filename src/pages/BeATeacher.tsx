@@ -156,7 +156,7 @@ export default function BeATeacher() {
                 <div>
                   <h3 className="text-xl font-medium mb-2">Earn while you share</h3>
                   <p className="text-muted-foreground">
-                    Turn your expertise into credits. Every class you teach earns you 30 credits (£60).
+                    Turn your expertise into credits. Every class you teach earns you 10 credits (£50).
                   </p>
                 </div>
               </div>
@@ -276,10 +276,10 @@ export default function BeATeacher() {
               </h2>
               <div className="space-y-4 text-muted-foreground mb-8">
                 <p>
-                  Our credit system makes earning simple and flexible. When you teach a class, you earn 30 credits per session.
+                  Our credit system makes earning simple and flexible. When you teach a class, you earn 10 credits per session.
                 </p>
                 <p>
-                  <strong className="text-foreground">30 credits = £60</strong> when you cash out. Credits can also be used to join other classes on the platform, giving you flexibility in how you use your earnings.
+                  <strong className="text-foreground">10 credits = £50</strong> when you cash out. Credits can also be used to join other classes on the platform, giving you flexibility in how you use your earnings.
                 </p>
               </div>
               <Card className="p-6 bg-muted/30">
@@ -287,11 +287,11 @@ export default function BeATeacher() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Per class taught:</span>
-                    <span className="font-medium">30 credits</span>
+                    <span className="font-medium">10 credits</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Cash value:</span>
-                    <span className="font-medium">£60</span>
+                    <span className="font-medium">£50</span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-border">
                     <span className="text-muted-foreground">Alternative use:</span>
