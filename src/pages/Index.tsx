@@ -117,12 +117,7 @@ export default function Index() {
       {/* Section 4: Credits */}
       <CreditsSection />
 
-      {/* Section 5: Learning Interest Form */}
-      <div ref={learningInterestRef} id="learning-interest">
-        <LearningInterestForm />
-      </div>
-
-      {/* Section 6: Current Classes */}
+      {/* Section 5: Current Classes */}
       <section ref={classesRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl sm:text-4xl font-serif font-medium text-foreground">
@@ -177,6 +172,11 @@ export default function Index() {
           </div>
         )}
       </section>
+
+      {/* Section 6: Learning Interest Form */}
+      <div ref={learningInterestRef} id="learning-interest">
+        <LearningInterestForm />
+      </div>
 
       {/* Section 7: Reviews */}
       <ReviewsSection />
