@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
+import { SparkImage } from "@/components/ui/spark-image";
 
 export function ValueProposition() {
   const navigate = useNavigate();
@@ -53,9 +54,9 @@ export function ValueProposition() {
             transformStyle: "preserve-3d",
           }}
         >
-          <img 
-            src="/value-prop-image.jpg" 
-            alt="Peer-led learning sessions" 
+          <SparkImage
+            src="/value-prop-image.jpg"
+            alt="Peer-led learning sessions"
             className="w-full h-full object-cover transition-transform duration-300 ease-out hover:scale-105"
           />
         </div>
