@@ -109,7 +109,7 @@ export default function Index() {
       <HeroSection onBrowseClassesClick={scrollToClasses} />
 
       {/* Section 2: Value Proposition */}
-      <ValueProposition />
+      <ValueProposition onBrowseClassesClick={scrollToClasses} />
 
       {/* Section 3: User Journey */}
       <UserJourney />
