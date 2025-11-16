@@ -230,6 +230,29 @@ export function CreditsSection() {
         ))}
       </div>
 
+      <Card className="mt-10 border-border/60 bg-muted/40 shadow-sm hover:shadow-md transition-colors">
+        <CardContent className="px-6 py-8">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-serif font-medium text-foreground">
+              Bring a Friend — Earn 5 Credits!
+            </h3>
+            <p className="text-muted-foreground">
+              Invite your friends to join our community and get rewarded.
+            </p>
+
+            <div>
+              <p className="text-sm font-medium text-foreground mb-2">How it works:</p>
+              <ol className="list-decimal pl-5 space-y-1.5 text-sm sm:text-base text-muted-foreground">
+                <li>Share your referral link with a friend.</li>
+                <li>Your friend signs up as a member.</li>
+                <li>They attend their first class.</li>
+                <li>You instantly earn 5 bonus credits.</li>
+              </ol>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <AlertDialog
         open={selectedPackage !== null}
         onOpenChange={(open) => {
