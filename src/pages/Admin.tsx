@@ -7,13 +7,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Navigation } from "@/components/Navigation";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+
+interface ExperienceItem {
+  name: string;
+  years?: string;
+}
+
+interface ProofLink {
+  label: string;
+  url: string;
+}
 
 interface HostApplication {
   id: string;
   user_id: string;
-  why_host: string;
-  topics: string;
-  experience: string | null;
+  bio: string;
+  teach_ideas: string;
+  experiences: ExperienceItem[] | null;
+  proof_links: ProofLink[] | null;
+  rejection_feedback: string | null;
   status: string;
   submitted_at: string;
   reviewed_at: string | null;
@@ -80,15 +93,26 @@ const Admin = () => {
   const fetchApplications = async () => {
     const { data, error } = await supabase
       .from("host_applications")
-      .select(`
-        *,
+      .select(
+        `
+        id,
+        user_id,
+        bio,
+        teach_ideas,
+        experiences,
+        proof_links,
+        rejection_feedback,
+        status,
+        submitted_at,
+        reviewed_at,
         profiles (
           full_name,
           email,
           city,
           country
         )
-      `)
+      `
+      )
       .order("submitted_at", { ascending: false });
 
     if (error) {
@@ -140,8 +164,8 @@ const Admin = () => {
   };
 
   const handleReject = async (applicationId: string) => {
-    const feedback = rejectionFeedback[applicationId];
-    if (!feedback || feedback.trim().length < 10) {
+    const feedback = (rejectionFeedback[applicationId] || "").trim();
+    if (feedback.length < 10) {
       toast({
         title: "Feedback Required",
         description: "Please provide rejection feedback (minimum 10 characters).",
@@ -156,7 +180,7 @@ const Admin = () => {
         .update({
           status: "rejected",
           reviewed_at: new Date().toISOString(),
-          experience: feedback, // Store feedback in experience field temporarily
+          rejection_feedback: feedback,
         })
         .eq("id", applicationId);
 
@@ -164,7 +188,7 @@ const Admin = () => {
 
       toast({
         title: "Application Rejected",
-        description: "Feedback has been sent to the applicant.",
+        description: "Feedback has been saved.",
       });
 
       setRejectionFeedback({ ...rejectionFeedback, [applicationId]: "" });
@@ -233,17 +257,43 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <h3 className="font-semibold mb-2">Why host?</h3>
-                      <p className="text-muted-foreground">{app.why_host}</p>
+                      <h3 className="font-semibold mb-2">Bio</h3>
+                      <p className="text-muted-foreground whitespace-pre-wrap">{app.bio}</p>
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-2">Topics to teach</h3>
-                      <p className="text-muted-foreground">{app.topics}</p>
+                      <h3 className="font-semibold mb-2">What they can teach</h3>
+                      <p className="text-muted-foreground whitespace-pre-wrap">{app.teach_ideas}</p>
                     </div>
-                    {app.experience && (
+                    {app.experiences && app.experiences.length > 0 && (
                       <div>
-                        <h3 className="font-semibold mb-2">Experience</h3>
-                        <p className="text-muted-foreground">{app.experience}</p>
+                        <h3 className="font-semibold mb-2">Teaching or mentoring experience</h3>
+                        <ul className="list-disc pl-5 text-muted-foreground space-y-1">
+                          {app.experiences.map((ex, i) => (
+                            <li key={i}>
+                              {ex.name}
+                              {ex.years ? ` — ${ex.years} year${ex.years === "1" ? "" : "s"}` : ""}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {app.proof_links && app.proof_links.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold mb-2">Proof links</h3>
+                        <ul className="list-disc pl-5 space-y-1">
+                          {app.proof_links.map((lnk, i) => (
+                            <li key={i}>
+                              <a
+                                className="text-primary underline break-all"
+                                href={lnk.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {lnk.label || lnk.url}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
                     <div className="flex gap-4 pt-4">
@@ -318,3 +368,4 @@ const Admin = () => {
 };
 
 export default Admin;
+

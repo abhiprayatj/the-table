@@ -9,7 +9,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Wallet,
+  Users,
+  CalendarClock,
+  HeartHandshake,
+  ShieldCheck,
+  FilePlus,
+  Banknote,
+  UserRound,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 // Placeholder components
@@ -21,13 +32,10 @@ function HeroImagePlaceholder() {
   );
 }
 
-function IconPlaceholder({ size = 56 }: { size?: number }) {
+function IconCircle({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="bg-muted rounded-lg flex items-center justify-center flex-shrink-0"
-      style={{ width: size, height: size }}
-    >
-      <div className="text-muted-foreground text-xs">Icon</div>
+    <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+      {children}
     </div>
   );
 }
@@ -48,7 +56,7 @@ function TestimonialCard({ name, topic, quote }: { name: string; topic: string; 
     <Card className="p-6 h-full">
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-full bg-muted flex-shrink-0 flex items-center justify-center">
-          <div className="text-muted-foreground text-xs">Avatar</div>
+          <UserRound className="h-6 w-6 text-muted-foreground" />
         </div>
         <div className="flex-1">
           <h4 className="font-medium mb-1">{name}</h4>
@@ -109,7 +117,7 @@ export default function BeATeacher() {
         {/* Hero Section */}
         <section className="mb-24 sm:mb-32">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-medium text-foreground mb-6 leading-tight">
-            Share what you know. Earn credits. Help others level up.
+            Share what you know. Be a teacher.
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl">
             Host small 60-minute classes for small groups. Teach what you&apos;re good at — we handle the rest.
@@ -124,7 +132,14 @@ export default function BeATeacher() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
-          <HeroImagePlaceholder />
+          <img
+            src="/teacher-hero.jpg"
+            alt="Teacher sharing knowledge with a small group"
+            className="w-full h-[280px] sm:h-[340px] rounded-xl object-cover"
+            width={1600}
+            height={900}
+            loading="eager"
+          />
         </section>
 
         {/* Why Teach With Us */}
@@ -135,7 +150,9 @@ export default function BeATeacher() {
           <div className="grid sm:grid-cols-2 gap-6">
             <Card className="p-6">
               <div className="flex gap-4">
-                <IconPlaceholder size={56} />
+                <IconCircle>
+                  <Wallet className="h-7 w-7 text-foreground" />
+                </IconCircle>
                 <div>
                   <h3 className="text-xl font-medium mb-2">Earn while you share</h3>
                   <p className="text-muted-foreground">
@@ -146,7 +163,9 @@ export default function BeATeacher() {
             </Card>
             <Card className="p-6">
               <div className="flex gap-4">
-                <IconPlaceholder size={56} />
+                <IconCircle>
+                  <Users className="h-7 w-7 text-foreground" />
+                </IconCircle>
                 <div>
                   <h3 className="text-xl font-medium mb-2">Small, friendly groups</h3>
                   <p className="text-muted-foreground">
@@ -157,7 +176,9 @@ export default function BeATeacher() {
             </Card>
             <Card className="p-6">
               <div className="flex gap-4">
-                <IconPlaceholder size={56} />
+                <IconCircle>
+                  <CalendarClock className="h-7 w-7 text-foreground" />
+                </IconCircle>
                 <div>
                   <h3 className="text-xl font-medium mb-2">Flexible schedule</h3>
                   <p className="text-muted-foreground">
@@ -168,7 +189,9 @@ export default function BeATeacher() {
             </Card>
             <Card className="p-6">
               <div className="flex gap-4">
-                <IconPlaceholder size={56} />
+                <IconCircle>
+                  <HeartHandshake className="h-7 w-7 text-foreground" />
+                </IconCircle>
                 <div>
                   <h3 className="text-xl font-medium mb-2">Join a community</h3>
                   <p className="text-muted-foreground">
@@ -189,7 +212,9 @@ export default function BeATeacher() {
             {/* Step 1 */}
             <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
               <div className="w-full sm:w-auto">
-                <ImagePlaceholder width={120} height={160} className="w-full sm:w-[120px]" />
+                <div className="w-[120px] h-[120px] rounded-xl bg-muted flex items-center justify-center">
+                  <ShieldCheck className="h-10 w-10 text-foreground" />
+                </div>
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium text-muted-foreground mb-2">Step 1</div>
@@ -203,7 +228,9 @@ export default function BeATeacher() {
             {/* Step 2 */}
             <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
               <div className="w-full sm:w-auto">
-                <ImagePlaceholder width={120} height={160} className="w-full sm:w-[120px]" />
+                <div className="w-[120px] h-[120px] rounded-xl bg-muted flex items-center justify-center">
+                  <FilePlus className="h-10 w-10 text-foreground" />
+                </div>
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium text-muted-foreground mb-2">Step 2</div>
@@ -217,7 +244,9 @@ export default function BeATeacher() {
             {/* Step 3 */}
             <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
               <div className="w-full sm:w-auto">
-                <ImagePlaceholder width={120} height={160} className="w-full sm:w-[120px]" />
+                <div className="w-[120px] h-[120px] rounded-xl bg-muted flex items-center justify-center">
+                  <Banknote className="h-10 w-10 text-foreground" />
+                </div>
               </div>
               <div className="flex-1">
                 <div className="text-sm font-medium text-muted-foreground mb-2">Step 3</div>
@@ -270,9 +299,6 @@ export default function BeATeacher() {
                   </div>
                 </div>
               </Card>
-            </div>
-            <div className="w-full lg:w-auto flex-shrink-0">
-              <ImagePlaceholder width={180} height={180} className="w-full lg:w-[180px]" />
             </div>
           </div>
         </section>
@@ -348,7 +374,14 @@ export default function BeATeacher() {
               </div>
             </div>
             <div>
-              <ImagePlaceholder width={400} height={400} className="w-full h-[300px] sm:h-[400px]" />
+              <img
+                src="/class-placeholder.jpg"
+                alt="Students collaborating during a class"
+                className="w-full h-[300px] sm:h-[400px] rounded-lg object-cover"
+                width={1200}
+                height={800}
+                loading="lazy"
+              />
             </div>
           </div>
         </section>
@@ -377,57 +410,7 @@ export default function BeATeacher() {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="mb-24 sm:mb-32">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            <div className="lg:w-1/4 flex-shrink-0">
-              <ImagePlaceholder width={160} height={120} className="w-full lg:w-[160px]" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-3xl sm:text-4xl font-serif font-medium text-foreground mb-8">
-                Frequently Asked Questions
-              </h2>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="experience">
-                  <AccordionTrigger>Do I need teaching experience?</AccordionTrigger>
-                  <AccordionContent>
-                    No formal teaching experience is required. We&apos;re looking for people who are passionate about their subject and can share knowledge clearly. Many of our best teachers are experts in their field, not professional educators.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="signups">
-                  <AccordionTrigger>What if no one signs up?</AccordionTrigger>
-                  <AccordionContent>
-                    If your class doesn&apos;t reach the minimum number of participants, we&apos;ll notify you in advance and help you reschedule or adjust your class. You won&apos;t be penalized for low signups.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="topics">
-                  <AccordionTrigger>What can I teach?</AccordionTrigger>
-                  <AccordionContent>
-                    Almost anything! From practical skills like cooking and coding to creative pursuits like photography and writing. The key is that it can be taught effectively in a 60-minute session to a small group. We review applications to ensure quality and appropriateness.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="payment">
-                  <AccordionTrigger>How and when do I get paid?</AccordionTrigger>
-                  <AccordionContent>
-                    After each successful class, 30 credits are added to your teaching balance. You can cash out credits at any time (30 credits = £60) or use them to join other classes on the platform. Payments are processed within 5-7 business days.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="cancel">
-                  <AccordionTrigger>Can I cancel?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, you can cancel a class up to 48 hours before it starts. We ask that you give students reasonable notice. If you need to cancel with less notice due to emergencies, please contact us and we&apos;ll work with you.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="co-teach">
-                  <AccordionTrigger>Can I teach with a friend?</AccordionTrigger>
-                  <AccordionContent>
-                    Currently, each class is hosted by a single verified teacher. However, you can collaborate on class design and materials. If you&apos;re interested in co-teaching, reach out to us and we can discuss options.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          </div>
-        </section>
+        
 
         {/* Final CTA */}
         <section className="relative mb-8">

@@ -94,7 +94,7 @@ export default function Auth() {
       if (error) throw error;
 
       toast({
-        title: "Welcome to CommonFolk! 🎉",
+        title: "Welcome to The Table! 🎉",
         description: "Your account has been created successfully.",
       });
       navigate("/");
@@ -122,7 +122,7 @@ export default function Auth() {
       <Card className="w-full max-w-md border-border/50">
         <CardHeader className="space-y-3">
           <CardTitle className="text-3xl font-serif font-medium">
-            {isSignUp ? "Join CommonFolk" : "Welcome back"}
+            {isSignUp ? "Join The Table" : "Welcome back"}
           </CardTitle>
           <CardDescription className="text-base">
             {isSignUp
