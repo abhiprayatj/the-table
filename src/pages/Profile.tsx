@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -157,164 +157,204 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Card className="mb-8 border-border/50">
-          <CardContent className="pt-8">
-            <div className="flex items-start gap-6">
-              <Avatar className="h-20 w-20">
+
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        {/* Profile header */}
+        <Card className="shadow-sm border-border/50">
+          <CardContent className="py-6">
+            <div className="flex items-start gap-5">
+              <Avatar className="h-18 w-18">
                 <AvatarImage src={profile?.avatar_url} />
-                <AvatarFallback className="text-xl bg-muted">
+                <AvatarFallback className="text-lg bg-muted">
                   {profile?.full_name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              
+
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-3xl font-serif font-medium">{profile?.full_name}</h1>
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="text-2xl md:text-3xl font-serif font-medium">
+                    {profile?.full_name}
+                  </h1>
                   {profile?.host_verified && (
                     <Badge variant="secondary" className="bg-accent/50">
                       Verified Host
                     </Badge>
                   )}
                 </div>
-                <p className="text-muted-foreground mb-2 text-sm">
+                <p className="text-sm text-muted-foreground mt-1">
                   {profile?.city}, {profile?.country}
                 </p>
                 {profile?.bio && (
-                  <p className="text-sm mt-3 text-foreground/80 leading-relaxed">{profile.bio}</p>
+                  <p className="text-sm mt-3 text-foreground/80 leading-relaxed">
+                    {profile.bio}
+                  </p>
                 )}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Card className="border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl font-serif font-medium">
+        {/* Main dashboard row */}
+        <div className="grid md:grid-cols-2 gap-6 items-stretch">
+          {/* Credits */}
+          <Card className="h-full shadow-sm border-border/50">
+            <CardContent className="p-6 h-full flex flex-col">
+              <div className="flex items-center gap-2 mb-4">
                 <Coins className="h-5 w-5" />
-                Your Credits
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--topped-up-credit))]" />
-                  <span className="font-medium text-sm">Topped Up</span>
-                </div>
-                <span className="text-2xl font-serif font-medium">{credits?.topped_up_balance || 0}</span>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--teaching-credit))]" />
-                  <span className="font-medium text-sm">Teaching</span>
-                </div>
-                <span className="text-2xl font-serif font-medium">{credits?.teaching_balance || 0}</span>
+                <h2 className="text-xl font-serif font-medium">Your Credits</h2>
               </div>
 
-              <Button onClick={handleTopUp} className="w-full" size="lg">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--topped-up-credit))]" />
+                    <span className="font-medium text-sm">Topped Up</span>
+                  </div>
+                  <span className="text-2xl font-serif font-medium">
+                    {credits?.topped_up_balance || 0}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[hsl(var(--teaching-credit))]" />
+                    <span className="font-medium text-sm">Teaching</span>
+                  </div>
+                  <span className="text-2xl font-serif font-medium">
+                    {credits?.teaching_balance || 0}
+                  </span>
+                </div>
+              </div>
+
+              <Button onClick={handleTopUp} className="w-full mt-auto" size="lg">
                 Top Up Credits
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-border/50">
-            <CardHeader>
-              <CardTitle className="text-xl font-serif font-medium">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          {/* Quick actions */}
+          <Card className="h-full shadow-sm border-border/50">
+            <CardContent className="p-6 h-full flex flex-col">
+              <h2 className="text-xl font-serif font-medium mb-4">Quick Actions</h2>
+
               {profile?.host_verified ? (
-                <Button
-                  onClick={() => navigate("/create-class")}
-                  className="w-full"
-                  size="lg"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Host a Session
-                </Button>
+                <div className="flex-1 flex flex-col gap-3">
+                  <Button
+                    onClick={() => navigate("/create-class")}
+                    className="w-full bg-foreground text-background hover:bg-foreground/90"
+                    size="lg"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Host a Session
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="w-full bg-muted/20"
+                    onClick={() => navigate("/")}
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Browse Classes
+                  </Button>
+                </div>
               ) : (
-                <div className="text-center py-4">
-                  {hostApplication ? (
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        Application Status:{" "}
-                        <span
-                          className={`font-medium ${
-                            hostApplication.status === "pending"
-                              ? "text-amber-600"
-                              : hostApplication.status === "approved"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {hostApplication.status.charAt(0).toUpperCase() +
-                            hostApplication.status.slice(1)}
-                        </span>
-                      </p>
-                      {hostApplication.status === "pending" && (
-                        <p className="text-xs text-muted-foreground">
-                          Submitted{" "}
-                          {format(
-                            parseISO(hostApplication.submitted_at),
-                            "MMM d, yyyy"
-                          )}
+                <div className="flex-1 flex flex-col">
+                  <div className="text-center py-4">
+                    {hostApplication ? (
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          Application Status:{" "}
+                          <span
+                            className={`font-medium ${
+                              hostApplication.status === "pending"
+                                ? "text-amber-600"
+                                : hostApplication.status === "approved"
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {hostApplication.status.charAt(0).toUpperCase() +
+                              hostApplication.status.slice(1)}
+                          </span>
                         </p>
-                      )}
-                      {hostApplication.status === "rejected" && (
+                        {hostApplication.status === "pending" && (
+                          <p className="text-xs text-muted-foreground">
+                            Submitted{" "}
+                            {format(
+                              parseISO(hostApplication.submitted_at),
+                              "MMM d, yyyy"
+                            )}
+                          </p>
+                        )}
+                        {hostApplication.status === "rejected" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate("/apply-host")}
+                          >
+                            Reapply
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Want to teach? Apply to become a verified host!
+                        </p>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => navigate("/apply-host")}
                         >
-                          Reapply
+                          Apply to Host
                         </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Want to teach? Apply to become a verified host!
-                      </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate("/apply-host")}
-                      >
-                        Apply to Host
-                      </Button>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </div>
+
+                  <div className="mt-auto">
+                    <Button
+                      variant="outline"
+                      className="w-full bg-muted/20"
+                      onClick={() => navigate("/")}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Browse Classes
+                    </Button>
+                  </div>
                 </div>
               )}
-              
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => navigate("/")}
-              >
-                <Calendar className="h-4 w-4 mr-2" />
-                Browse Classes
-              </Button>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="border-border/50">
+        {/* Classes section */}
+        <Card className="shadow-sm border-border/50">
           <CardContent className="p-6">
             <Tabs defaultValue="joined">
-              <TabsList className="grid w-full grid-cols-2 bg-muted/30">
-                <TabsTrigger value="joined">Classes I've Joined</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 bg-transparent p-0 border-b border-border/60">
+                <TabsTrigger
+                  value="joined"
+                  className="rounded-none py-3 text-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-foreground data-[state=active]:text-foreground text-muted-foreground"
+                >
+                  Classes I've Joined
+                </TabsTrigger>
                 {profile?.host_verified && (
-                  <TabsTrigger value="hosted">Classes I've Hosted</TabsTrigger>
+                  <TabsTrigger
+                    value="hosted"
+                    className="rounded-none py-3 text-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-foreground data-[state=active]:text-foreground text-muted-foreground"
+                  >
+                    Classes I've Hosted
+                  </TabsTrigger>
                 )}
               </TabsList>
 
               <TabsContent value="joined" className="mt-6">
                 {joinedClasses.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p>You haven't joined any classes yet.</p>
+                  <div className="text-center py-10">
+                    <p className="text-sm md:text-base text-muted-foreground font-serif">
+                      You haven't joined any classes yet.
+                    </p>
                     <Button
                       variant="link"
                       onClick={() => navigate("/")}
@@ -347,8 +387,10 @@ export default function Profile() {
               {profile?.host_verified && (
                 <TabsContent value="hosted" className="mt-6">
                   {hostedClasses.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <p>You haven't hosted any classes yet.</p>
+                    <div className="text-center py-10">
+                      <p className="text-sm md:text-base text-muted-foreground font-serif">
+                        You haven't hosted any classes yet.
+                      </p>
                       <Button
                         variant="link"
                         onClick={() => navigate("/create-class")}
@@ -360,19 +402,19 @@ export default function Profile() {
                   ) : (
                     <div className="space-y-4">
                       {hostedClasses.map((classItem: any) => (
-                      <div
-                        key={classItem.id}
-                        className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:bg-muted/20 cursor-pointer transition-colors"
-                        onClick={() => navigate(`/class/${classItem.id}`)}
-                      >
-                        <div>
-                          <h3 className="font-serif font-medium">{classItem.title}</h3>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {format(parseISO(classItem.date), "MMM d, yyyy")} • {classItem.bookings.length}/{classItem.max_participants} spots
-                          </p>
+                        <div
+                          key={classItem.id}
+                          className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:bg-muted/20 cursor-pointer transition-colors"
+                          onClick={() => navigate(`/class/${classItem.id}`)}
+                        >
+                          <div>
+                            <h3 className="font-serif font-medium">{classItem.title}</h3>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {format(parseISO(classItem.date), "MMM d, yyyy")} • {classItem.bookings.length}/{classItem.max_participants} spots
+                            </p>
+                          </div>
+                          <Badge variant="outline" className="text-xs">{classItem.category}</Badge>
                         </div>
-                        <Badge variant="outline" className="text-xs">{classItem.category}</Badge>
-                      </div>
                       ))}
                     </div>
                   )}
