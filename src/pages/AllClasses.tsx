@@ -8,13 +8,9 @@ import { format, parseISO } from "date-fns";
 
 const CATEGORIES = [
   "All",
-  "Cooking",
   "Arts & Crafts",
   "Languages",
-  "Sports & Fitness",
-  "Music",
   "Technology",
-  "Gardening",
   "Writing",
   "Photography",
   "Other",

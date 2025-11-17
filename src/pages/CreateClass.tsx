@@ -27,13 +27,9 @@ const classSchema = z.object({
 });
 
 const CATEGORIES = [
-  "Cooking",
   "Arts & Crafts",
   "Languages",
-  "Sports & Fitness",
-  "Music",
   "Technology",
-  "Gardening",
   "Writing",
   "Photography",
   "Other",
